@@ -1,0 +1,6 @@
+<% content_for :head do %>
+  Editing Environment <%="[#{@environment.name}]" unless @environment.name == ''%>
+<% end %>
+
+<%= render :partial => 'edit_form', :locals =>
+  { :button_label => "Update", :environment => @environment, :all_lists => @lists }%>

@@ -1,0 +1,66 @@
+<% if (lists.size == 1)
+  single_test = true
+  list = lists.first
+  if list.instance_of?(List)
+    list_name = list.name
+  else
+    list_name = list
+  end
+end %>
+
+
+<% content_for :head do %>
+  <%=  single_test ? "Test List '#{list_name}'" : "All Tests" %>
+<% end %>
+
+<% content_for :navigation do %>
+  <%= single_test ?
+    render( :partial => 'lists/list_footer' ,  :locals => { :list => list }) :
+    render(:partial => 'environments/home_menu') %>
+<% end %>
+
+<table border="1">
+  <tr>
+    <% unless single_test  %>
+      <th>List</th>
+    <% end %>
+    <th>Name</th>
+    <th>Bug</th>
+    <th>Author</th>
+    <th>Created</th>
+    <th>Modified</th>
+<%#*<th>Description</th>%>
+  </tr>
+  <% cnt = 0
+  lists.each do |lst|
+    lst.testfiles(true).each do |tst|
+      cnt += 1
+      test_info = List.test_info(tst) || {} %>
+      <tr>
+        <% unless single_test %>
+          <td align="left"> <%= link_to lst.name, lst %> </td>
+        <% end %>
+        <td align="left">
+          <%= url = List.test_url(tst)
+          link_to_if url, tst, url %>
+        </td>
+        <td><%= jt = lst.jobtest_with_testid(tst)
+          if jt
+            bug = jt.bug
+            link_to(bug.key, url_for(bug.url))
+          else
+            ''
+          end
+        %></td>
+        <td> <%= test_info['author'] if test_info['author'] %></td>
+        <td> <%= test_info['created'] if test_info['created'] %></td>
+        <td> <%= test_info['last_modified'] if test_info['last_modified'] %></td>
+    <%#*<td align="left">%>
+    <%#= link_to 'Details', lists_url + '/' + tst  %>
+    <%#*</td>%>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+<b>Test Count: <%= cnt %>  </b>
+

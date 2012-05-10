@@ -1,0 +1,11 @@
+<% job_summary_array = (erequest.command == 'stop') ? [[],'','','','','','','',''] : erequest.job_summary %>
+<%= render :partial => 'erequests/job_summary_columns',
+  :locals => { :job_summary_array => job_summary_array, :model => erequest} %>
+
+<td> <%=h erequest.user.name if erequest.user %></td>
+<td> <%=h erequest.created_at.strftime(Job::DF) if erequest %></td>
+<td> <%= fstr = erequest.finish_str
+  link_to_if erequest.stop_erequest, fstr, erequest.stop_erequest if fstr %></td>
+<td> <%= erequest.elapsed if erequest%></td>
+
+<td> <%=h erequest.message if erequest%></td>

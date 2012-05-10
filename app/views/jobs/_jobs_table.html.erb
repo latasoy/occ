@@ -1,0 +1,97 @@
+<table border="1">
+  <tr>
+    <% if @lists_run_job_tag %>
+      <th></th>
+    <% end %>
+    <th>JobID</th>
+    <% unless [JobsController, ErequestsController].include? controller.class  %>
+      <th>RunID </th>
+    <% end %>
+    <th>Test-List</th>
+    <th>Envirmn</th>
+    <th>Build</th>
+    <th>Machine</th>
+    <th>RepoVer</th>
+    <th>Total</th>
+    <th>Pass</th>
+    <th>Fail</th>
+    <th>New</th>
+    <th>Skip</th>
+    <th>Browser</th>
+    <th>User</th>
+    <th>Started</th>
+    <th>Finished</th>
+    <th>Elaps</th>
+    <th>Messages</th>
+  </tr>
+  <% jobs.each do |job|
+    testlist = nil
+    if job.machine
+      testlist = job.tests
+    end
+  %>
+    <tr align="center">
+      <% if @lists_run_job_tag %>
+        <td> <%= check_box_tag "#{@lists_run_job_tag}[]",  job.id,
+            (@lists_run_job_tag == 'unfinished_job' or !controller.instance_of?(EnvironmentsController)),
+            :class => 'check' %></td>
+      <% end %>
+      <td><%= link_to_if testlist, job.id, job_path(job)  %></td>
+      <% unless [JobsController, ErequestsController].include? controller.class  %>
+        <td><%= link_to job.erequest.id , erequest_path(job.erequest) %></td>
+      <% end %>
+      <td align="left">
+        <%= if controller.class.to_s == 'ListsController' and controller.action_name == 'jobs'
+          link_to job.list_name, list_path(job.list)
+        else
+          link_to job.list_name, jobs_list_path(job.list)
+        end %>
+      </td>
+      <td><%= link_to_if testlist, job.environment_name, \
+          url_for(job.url('run_info_'+job.erequest.environment.file_name+'.txt')) if job.environment_name %></td>
+      <td> <%= link_to_if testlist, job.build_version[job.build_version['execution']], \
+          url_for(job.url('buildID_'+job.environment_name+'.txt')) if job.build_version and
+          job.build_version[job.build_version['execution']] %> </td>
+      <td><%= link_to job.machine.nickname, job.machine.url + 'agent_logs/' + (job.logfile ? job.logfile : '') if job.machine %></td>
+      <td><%= link_to_unless job.repo_svn?, job.repo_version[0..7],
+          url_for(SystemConfig.repo_url(job.repo_version)) if job.repo_version%> </td>
+      <td><%=
+        if testlist and job.total
+          url = job.url('oats.log');
+          link_to_if url, job.total.to_s + (job.is_finished ? '' : '+') , url_for(url)
+        end
+      %></td>
+      <td> <%= job.pass if testlist and job.pass != 0 %> </td>
+      <td> <%= link_to(job.fail, url_for(job.url(Report.failed_file_name(job.list_name)))) \
+          if testlist and job.fail and job.fail != 0 %> </td>
+      <td> <%=
+        diff = job.bugs_failed
+        bug_str = ''
+        bug_cnt = 0
+        bugs = []
+        for tst_idx, jobtest, different in diff do
+          if different
+            if jobtest
+              bug = jobtest.bug
+              bugs << bug
+            end
+            bug_cnt += 1
+          end
+        end
+        bugs.uniq.each do |bug|
+          bug_str << ' ' + link_to(bug.key, url_for(bug.url))
+        end
+        bug_str << " +#{bug_cnt}" if bug_cnt > 0
+        bug_str.html_safe
+      %> </td>
+
+      <td> <%= job.skip if job.skip and job.skip != 0 %> </td>
+      <td> <%= job.browser if job.browser %> </td>
+      <td> <%= job.erequest.user.name if job.erequest.user %> </td>
+      <td><%= url = job.url(''); link_to_if url, job.started_str, url_for(url) if job.started_str %></td>
+      <td><%= jf = job.finish_str; link_to_if job.stop_erequest, jf, job.stop_erequest if jf %> </td>
+      <td><%= job.elapsed_str %></td>
+      <td> <%= job.results_error_msg if job.started_at and job.results_error_msg %> </td>
+    </tr>
+  <% end %>
+</table>

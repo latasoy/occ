@@ -1,0 +1,106 @@
+
+/* reset */
+* {	margin: 0; padding: 0; }
+
+/* tell the browser to render HTML 5 elements as block */
+header, footer, section, aside, nav, article { display: block; }
+
+/* basic styles */
+
+body { font-size: 14px; line-height: 1.5em; font-family: Verdana,Helvetica,Arial,sans-serif; background-color: #ffffff; }
+
+h1 { font-size: 18px; margin-bottom: 40px; }
+h2 { font-size: 16px; margin-bottom: 30px; }
+h3 { font-size: 14px; margin-bottom: 20px; }
+h4, h5, h6 { font-size: 14px; margin-bottom: 10px; }
+
+ul { list-style: square; margin: 0 0 0 40px; padding: 0; }
+
+.small { font-size: 12px; }
+.nomargin { margin: 0; }
+
+
+.round { border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+.clear { clear: both; }
+.top150 { margin-top: 150px; }
+
+/* style the head section */
+#head { margin-bottom: 20px; padding: 0px 20px 20px 20px; border-bottom: 1px solid #bbbbbb; background-color: #eeeeee; }
+#head h1 { font-size: 24px; color: #c81419; margin: 0; }
+#head h1 sup { color: #74809a; font-style: italic; }
+
+/* navigation */
+nav { text-align: right; font-size: 12px; }
+nav ul { padding: 0; margin: 0; list-style: none; }
+nav ul span { margin-right: 20px; }
+nav ul li { padding: 0; margin: 0 20px 0 0; display:inline; }
+nav li a { width: 100px; text-align: center; text-decoration: none; }
+nav ul li.selected a { color: #c81419; }
+
+/* the main section of the page, not to be confused with the body tag */
+#body { padding: 0 20px; }
+
+/* flash message */
+#flash { margin-bottom: 60px; }
+.flash { padding: 5px; background-color: #dddddd; }
+.error { color: #ffffff; background-color: #c81419; }
+.notice { background-color: #ffff00; }
+
+
+body {
+  background-color: #fff;
+  color: #333;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 18px; }
+
+p, ol, ul, td, th {
+  font-family: verdana, arial, helvetica, sans-serif;
+  padding: 2px;
+  font-size: 13px;
+  line-height: 18px; }
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px; }
+
+a {
+  color: #00c;
+  &:visited {
+    color: #96a; }
+  &:hover {
+    background-color: #ccc;
+    color: #f00; }}
+
+div {
+  &.field, &.actions {
+    margin-bottom: 10px; } }
+
+#notice {
+  color: green; }
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table; }
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    margin-bottom: 0px;
+    background-color: #c00;
+    color: #fff; }
+  ul li {
+    font-size: 12px;
+    list-style: square; } }

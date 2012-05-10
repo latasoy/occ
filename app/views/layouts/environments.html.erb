@@ -1,0 +1,4 @@
+<% content_for :title do %>
+  OCC Environments: <%= controller.action_name %> <%= @environment.name if @environment %>
+<% end %>
+<%= render :template => 'layouts/application' %>

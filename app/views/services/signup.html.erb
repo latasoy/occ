@@ -1,0 +1,34 @@
+<% content_for :head do %>
+  New account
+<% end %>
+<section id="services_new" class="services">
+  <div>
+    <h3>This authentication is new to OATS</h3>
+
+    <p class="small">
+      Provider: <%= @authhash[:provider] %><br />
+      ID: <%= @authhash[:uid] %><br />
+      Name: <%= @authhash[:name] %><br />
+      Email: <%= @authhash[:email] %>	<br />
+    </p>
+
+    <%= form_tag :controller => "services", :action => "newaccount" do %>
+      <%= submit_tag "Confirm and create new account" %> <%= submit_tag "Cancel" %>
+    <% end %>
+  </div>
+
+  <p>
+    If you think you already have an OATS account, and you were just trying to associate a new
+    authentication with your existing account, then you’re in the wrong place.
+    You’re not logged into OATS right now.
+  </p>
+
+  <p class="small nomargin">
+    If you have a OATS account, and you’d like to associate another authentication with it, here’s what to do:
+  </p>
+  <ul class="small">
+    <li>Log in in to OATS with your existing authentication service</li>
+    <li>Go to your settings page (located at the top/right corner of the page)
+    <li>Add one or more accounts to be used to sign-in</li>
+  </ul>
+</section>

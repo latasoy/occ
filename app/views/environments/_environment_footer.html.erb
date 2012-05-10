@@ -1,0 +1,4 @@
+<% if environment and environment.created_at %>
+  <%= link_to 'New', new_environment_path %> |
+  <%= link_to('Edit', edit_environment_path(environment)) + ' |' unless controller.action_name == 'edit'%>
+<% end %>

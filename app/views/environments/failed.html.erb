@@ -1,0 +1,21 @@
+<% content_for :head do %>
+  Failed Tests for <%= @environment.name %>
+<% end %> 
+<% content_for :navigation do %>
+  <%= render :partial => 'environment_footer', :locals => {:environment => @environment} %>
+  <%= render :partial => 'home_menu' %>
+<% end %>
+
+<%  jobs = Job.latest_jobs_for_env(@environment)
+if not jobs.empty? %>
+  <%= render :partial => 'environments/environments_summary_table',
+    :locals => {:environments =>[@environment],:latest_jobs => jobs}%>
+  <br/>
+  <b>Latest Jobs for Each List</b>
+  <%= render :partial => 'jobs/jobs_table', :locals => { :jobs => jobs } %>
+  <br/>
+  <%= render :partial => 'jobs/failed_jobs', :locals => {:jobs => jobs, :new_failed => false} %>
+<% else %>
+  <b>No jobs were created for Environment-<%= @environment.id %>.</b>
+<%end%>
+

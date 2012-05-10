@@ -1,0 +1,15 @@
+<% content_for :head do %>
+  Authentication Services - Settings
+<% end %>
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu'%>
+<% end %>
+<section id="services_manage" class="services">
+  <h2>You can use these accounts to sign in</h2>
+  <%= render :partial => 'signedin_services',  :locals => {:services => @services}  %>
+
+  <div id="services_available">
+    <h2>Available services to create accounts to sign in</h2>
+    <%= render 'services_list'%>
+  </div>
+</section>

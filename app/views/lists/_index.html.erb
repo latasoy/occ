@@ -1,0 +1,9 @@
+<% content_for :navigation do %>
+  <%= render :partial => 'lists/list_footer', :locals => { :list => nil } %>
+<% end %> 
+
+<% if @lists.length == 0 %>
+  <p>There are no lists.</p>
+<% else %>
+  <%= render :partial => 'lists/lists_table'%>
+<% end %>

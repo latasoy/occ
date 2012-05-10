@@ -1,0 +1,32 @@
+// Place all the styles related to the Services controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+/* services - views: signin, signup and index of service controller */
+/* ---------------------------------------------------------------- */
+
+.services { margin: 0; padding: 0; }
+
+/* signin */
+#services_signin div { overflow:auto; margin-bottom: 40px; }
+
+/* signup: create new account */
+#services_new {}
+#services_new input { margin-right: 20px; }
+#services_new div { background-color: #dddddd; padding: 20px; margin-bottom: 40px; }
+
+/* manage your services */
+#services_manage {}
+
+.service_in_use { background-color: #dddddd; height: 64px; width: 300px; margin-bottom: 10px; padding: 5px; }
+.service_img { float: left; }
+.service_userdata { font-size: 12px; line-height: 1.1em; margin-left: 80px; padding-top: 6px;}
+.service_userdata span { color: #c81419; }
+
+#services_available { clear: both; margin-top: 40px; }
+
+/* the list with the available services that consist of icons and text */
+#services_list { margin: 20px 0; padding: 0; list-style: none; }
+#services_list li { display: inline; float: left; margin-right: 25px; margin-bottom: 20px; width: 100px; text-align: center; }
+#services_list img { display: block; margin-left: auto; margin-right: auto; }

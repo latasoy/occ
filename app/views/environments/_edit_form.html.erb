@@ -1,0 +1,61 @@
+<% content_for :navigation do %>
+  <%= render :partial => 'environment_footer', :locals => {:environment => environment} %>
+  <%= render :partial => 'home_menu'%>
+<% end %>
+
+<%= form_for(environment) do |f| %>
+  <% if environment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(environment.errors.count, "error") %> prohibited this environment from being saved:</h2>
+      <ul>
+        <% environment.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field  :name %>
+  </div>
+  <div class="field">
+    <%= f.label :file %>
+    <%= f.text_field  :file %>
+  </div>
+  Delete from view?  <%= check_box_tag "delete", 1 , environment.deleted_at, :class => 'check' %>
+  <%= environment.deleted_at.nil? ? nil : "(Was deleted at #{@environment.deleted_at})" %> <br/>
+  Skip rerun failed lists? <%= check_box_tag "environment[rerun]", 1 , environment.rerun, :class => 'check' %>
+  <br/> <br/>
+  <div class="field">
+    <%= f.label :run_options %>
+    <%= f.text_field  :run_options %>
+  </div>
+  <div class="field">
+    <%= f.label :agents %>
+    <%= f.text_field  :agents %>
+  </div>
+  <div style="margin-left: 10px; margin-bottom: 15px">
+  </div>
+  <% if all_lists.length == 0 %>
+    <p>There are no lists to associate.</p>
+  <% else %>
+    Select the lists to run for this environment:
+    <div style="margin-left: 10px; margin-bottom: 20px">
+      <table>
+        <% for list in all_lists %>
+          <tr>
+            <td>
+              <%= check_box_tag "environment[list_ids][]", list.id, environment.lists.include?(list), :class => 'check' %>
+            </td>
+            <td>
+              <%= list.name %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+  <div class="actions">
+    <%= f.submit button_label %>
+  </div>
+<% end %>

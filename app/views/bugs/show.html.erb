@@ -1,0 +1,44 @@
+<h1> </h1>
+<% content_for :head do %>
+  Tests Associated with <%= link_to @bug.key , url_for(@bug.url) %>
+<% end %>
+<% content_for :navigation do %>
+  <%= link_to 'Edit', edit_bug_path(@bug) %> |
+  <%= link_to 'Delete', @bug, :confirm => "Are you sure you want to delete '#{@bug.key}'?", :method => :delete %> |
+  <%= render :partial => 'environments/home_menu' %>
+<% end %>
+
+<% if @bug.deleted_at %>
+  <b> This bug was deleted on <%= @bug.deleted_at.strftime(Job::DF) %> </b>
+  <br/>
+  <%= unless @bug.jobtests.failing.empty?
+    msg =  "Is bug #{@bug.key} still open?"
+    button_to('Undelete Bug', undelete_bug_path(@bug) , :confirm => msg )
+  end %>
+  <br/>
+<% else %>
+  <%=  button_to 'Delete Bug',  { :action => "destroy", :id => @bug.id },
+    :method => :delete, :confirm => "Is bug #{@bug.key} closed?"  %>
+  <br>
+<% end %>
+<table border="1">
+  <tr>
+    <th>Job ID</th>
+    <th>Test ID</th>
+    <th>Passed</th>
+    <th>List Name</th>
+    <th>Delete</th>
+  </tr>
+  <% @bug.jobtests.active.each do |jobtest|
+    job = jobtest.job
+    testid = jobtest.testid %>
+    <tr>
+      <td align="center"> <%= link_to job.id, job_path(job) %> </td>
+      <td> <%= tst = testid ; url = List.test_url(tst); link_to_if url, tst, url_for(url) %> </td>
+      <td> <%= link_to_if jobtest.passed, jobtest.passed , job_path(jobtest.passed)  %> </td>
+      <td> <%= link_to job.list.name, list_path(job.list) %> </td>
+      <td align="center"> <%= link_to('Delete', remove_bug_job_path(job, :testid => testid)) %></td>
+    </tr>
+  <% end %>
+</table>
+

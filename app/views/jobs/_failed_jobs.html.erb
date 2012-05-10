@@ -1,0 +1,18 @@
+<b><%= 'Unresolved' unless controller.action_name == 'failed' %> Failed Tests</b>
+<table border="1">
+  <%= render :partial => 'jobs/test_row_headers' %>
+  <%
+  jobs.each do |job|
+    fail = job.bugs_failed
+    for tst_idx, bugs, different in fail do
+      next if new_failed and !different
+      if job.tests and not job.tests.empty?
+        tst = job.tests[tst_idx]
+      %>
+        <tr align="center">
+          <%= render :partial => 'jobs/test_row', :locals => {:tst => tst, :job => job} %>
+        </tr>
+      <% end
+    end %>
+  <% end %>
+</table>

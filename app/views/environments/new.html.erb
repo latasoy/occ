@@ -1,0 +1,10 @@
+<% content_for :head do %>
+  New Environment
+<% end %> 
+<% content_for :navigation do %>
+  <%= link_to 'All Environments', all_environments_path %> |
+<% end %> 
+
+<%= render :partial => 'edit_form', :locals =>
+  { :button_label => "Create", :environment => @environment, :all_lists => @lists }%>
+

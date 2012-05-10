@@ -1,0 +1,9 @@
+<% content_for :head do %>
+  New list
+<% end %> 
+<% content_for :navigation do %>
+  <%= render :partial => 'list_footer', :locals => { :list => @list } %>
+<% end %> 
+
+<%= render :partial => 'edit_list_form', :locals =>
+  { :button_label => "Create",  :list => @list }%>

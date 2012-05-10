@@ -1,0 +1,27 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%=  link_to_if @user.url, image_tag(@user.image), (url_for(@user.url) if @user.url) if @user.image%>
+
+  <div class="field">
+    <%= f.label :name %>: <%= @user.name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %>: <%= @user.email %>
+  </div>
+  <div class="field">
+    <%= f.label :level %>: <%= f.text_field :level %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

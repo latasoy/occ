@@ -1,0 +1,27 @@
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu'%>
+<% end %>
+
+<table border="1" >
+  <tr>
+    <th>Key</th>
+    <th>Tests</th>
+    <th>Edit</th>
+    <th>(Un)Delete</th>
+  </tr>
+
+  <% @bugs.each do |bug| %>
+    <tr align="center">
+      <td><%= link_to bug.key , url_for(bug.url) %></td>
+      <td><%= jt = bug.jobtests; cnt = jt.active.count; link_to_if cnt > 0, "#{jt.failing.count}/#{cnt}" , bug_path(bug) %></td>
+      <td><%= link_to 'Edit', edit_bug_path(bug) %></td>
+      <td><% if bug.deleted_at %>
+          <%= button_to bug.deleted_at.strftime(Job::DF), undelete_bug_path(bug) %>
+        <% else %>
+          <%= button_to 'Delete',  { :action => "destroy", :id => bug.id },
+            :method => :delete, :confirm => "Is bug #{bug.key} closed?"  %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

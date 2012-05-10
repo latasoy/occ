@@ -1,0 +1,22 @@
+<% content_for :head do %>
+  Job: <%= @job.id %>
+<% end %> 
+<% content_for :navigation do %>
+  <%= link_to 'Back', :back %> |
+  <%= render :partial => 'environments/home_menu'%>
+<% end %> 
+
+<%= render :partial => 'erequests/erequest_and_jobs', :locals => {:erequest => @job.erequest} %>
+<br/>
+<%  if @job.tests and not @job.tests.empty? %>
+  <table border="1">
+    <%= render :partial => 'jobs/test_row_headers' %>
+    <% @job.tests.each do |tst| %>
+      <tr align="center">
+        <%= render :partial => 'jobs/test_row', :locals => {:tst => tst, :job => @job} %>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p> There are no test results for this job (yet?). </p>
+<% end %>

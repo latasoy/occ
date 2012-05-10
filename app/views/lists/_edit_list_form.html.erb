@@ -1,0 +1,27 @@
+
+<%= form_for(list) do |f| %>
+
+  <% if list.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(list.errors.count, "error") %> prohibited this list from being saved:</h2>
+
+      <ul>
+        <% list.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, :size => 50 %><br />
+    Delete from view?  <%= check_box_tag "delete", 1 , list.deleted_at, :class => 'check'%> <br/>
+    Skip rerun when fails?  <%= check_box_tag "list[rerun]", 1 , list.rerun, :class => 'check'%>
+  </div>
+  <%= list.deleted_at.nil? ? nil : "(Was deleted at #{list.deleted_at})" %>
+  <br/>
+  <div class="actions">
+    <%= f.submit button_label %>
+  </div>
+<% end %>

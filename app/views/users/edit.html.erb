@@ -1,0 +1,11 @@
+<% content_for :head do %>
+  Editing User <%=  @user.name %>
+<% end %>
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu'%>
+<% end %>
+
+<%= render 'form' %>
+<br></br>
+<h2>Associated accounts</h2>
+<%= render :partial => 'services/signedin_services',  :locals => {:services => @user.services} %>

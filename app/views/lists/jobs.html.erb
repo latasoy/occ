@@ -1,0 +1,7 @@
+<% content_for :head do %>
+  Jobs Executed for '<%= @list.name%>
+<% end %> 
+<% content_for :navigation do %>
+  <%= render :partial => 'list_footer', :locals => { :list => @list }%>
+<% end %> 
+<%= render :partial => 'jobs/jobs_table', :locals => { :jobs => @jobs } %>

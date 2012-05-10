@@ -1,0 +1,4 @@
+<% content_for :title do %>
+  OCC Jobs: <%= controller.action_name %> <%= "#{@job.id} #{@job.list_name}" if @job %>
+<% end %>
+<%= render :template => 'layouts/application' %>

@@ -1,0 +1,35 @@
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu' %>
+<% end %>
+
+<%= form_for(bug) do |f| %>
+
+  <% if bug.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
+      <ul>
+        <% bug.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= link_to 'Key' , url_for(@bug.url) %>:<br />
+    <%= f.text_field :key %>
+  </div>
+
+  <% if button_label == 'Create' %>
+    <%= text_field :jobtest, :testid , :hidden => true %>
+    <%= text_field :jobtest, :job_id , :hidden => true %>
+    List: <%=link_to(jobtest.job.list.name, list_path(jobtest.job.list)) %> <br>
+    Test: <%= tst = jobtest.testid; url = jobtest.job.url(tst+'/oats_test.log'); link_to_if url, jobtest.testid, url_for(url)%> <br>
+    Job: <%= link_to jobtest.job.id, job_path(jobtest.job) %> <br> <br>
+
+  <% end %>
+  <div class="actions">
+    <%= f.submit button_label %>
+  </div>
+
+<% end %>

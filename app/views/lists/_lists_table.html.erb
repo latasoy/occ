@@ -1,0 +1,39 @@
+<table border="1">
+  <tr>
+    <% unless controller.class == ListsController %>
+      <th></th>
+    <% end %>
+    <th>Name</th>
+    <th>Tests</th>
+    <th>Edit</th>
+    <% if controller.class == ListsController %>
+      <th>(Un)Delete</th>
+    <% end %>
+    <th>Executed</th>
+  </tr>
+  <% total_tests = 0
+  @lists.each do |list|
+    testfiles_size = list.test_count
+    total_tests += testfiles_size
+  %>
+    <tr align="center">
+      <% unless controller.class == ListsController %>
+        <td> <%= check_box_tag "list[]", list.id, false, :class => 'check' %></td>
+      <% end %>
+      <td align="left"> <%= link_to list.name, list %> </td>
+      <td> <%= link_to_if (testfiles_size != 0), testfiles_size, url_for( list.url ) %> </td>
+      <td><%= link_to 'Edit', edit_list_path(list) %></td>
+      <% if controller.class == ListsController %>
+        <td>
+          <% if list.deleted_at %>
+            <%= button_to list.deleted_at.strftime(Job::DF), undelete_list_path(list) %>
+          <% else %>
+            <%= button_to 'Delete',  { :action => "destroy", :id => list.id }, :method => :delete, :confirm => "Are you sure?"%>
+          <% end %>
+        </td>
+      <%   end %>
+      <td> <%= link_to 'Executed', jobs_list_path(list) %>  </td>
+    </tr>
+  <% end %>
+</table>
+<b>List Count: <%= @lists.size %> , <%= link_to 'Test Count: '+total_tests.to_s,  tests_lists_path %> </b>

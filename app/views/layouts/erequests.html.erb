@@ -1,0 +1,4 @@
+<% content_for :title do %>
+  OCC Runs: <%= controller.action_name %> <%= @erequest.id if @erequest %>
+<% end %>
+<%= render :template => 'layouts/application' %>

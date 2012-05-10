@@ -1,0 +1,47 @@
+
+<% diff_arr, build, browser, jobs, total_tests, passed_tests, failed_tests, skip_tests = job_summary_array
+diff = diff_arr.find_all {|d| d[2]}
+diff = diff.size
+#model = nil unless (defined? model) # Should really not be called,
+#if model.nil? and diff > 0
+#case self.controller.params[:controller]
+#when 'environments'
+#model = @environment
+#when 'erequests'
+#model = @erequest
+#when 'jobs'
+#model = @job.erequest.environment
+#end
+#end
+
+## The code below restarts selective build runs
+#$oats['execution']['build_versions'].each do |name|
+#$oats['execution']['build_versions'].each do |name|
+# <td> link_to_if build[name],  build[name], start_environment_path(model, :build => name) if build </td>
+# end
+#  link_to_if build[name],  build[name], start_environment_path(model, :build => name) if build
+%>
+
+<% versions = $oats['execution']['build_versions'].each do |name| %>
+  <td> <%= build[name]if build %></td>
+<% end %>
+<td> <%= jobs if jobs  %></td>
+<td> <%= total_tests %></td>
+<td> <%= passed_tests %></td>
+<td> <%=
+  case model
+  when Environment then link_to failed_tests, failed_environment_path(model)
+  when Erequest then link_to failed_tests, failed_erequest_path(model)
+  else failed_tests
+  end unless failed_tests == ''
+%></td>
+<td> <%=
+  case model
+  when Environment then link_to diff, new_failed_environment_path(model)
+  when Erequest then link_to diff, new_failed_erequest_path(model)
+  else diff
+  end unless diff == 0
+%></td>
+<td> <%= skip_tests %></td>
+<td> <%= browser %></td>
+

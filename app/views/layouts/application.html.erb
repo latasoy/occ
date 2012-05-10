@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) if content_for?(:title) %></title>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+
+    <section id="head">
+      <section id="user">
+        <nav id="nav_user">
+          <ul>
+            <li>
+              <%= yield(:navigation) if content_for?(:navigation) %>
+            </li>
+            <% if current_user %>
+              <li><%= link_to 'Admin', system_configs_path if current_user.level == 1 %></li>
+              <span><%= link_to current_user.email, services_path %></span>
+              <li><%= link_to "Sign out", signout_services_path %></li>
+              <% else %>
+              <li><%= link_to "Sign in", signin_services_path %></li>
+              <% end %>
+          </ul>
+        </nav>
+      </section>
+
+      <h1><sup>OATS</sup><%= yield :head %></h1>
+    </section>
+
+    <section id="body">
+
+      <%= render :template => 'layouts/flash' unless flash.empty?%>
+
+      <%= yield %>
+    </section>
+
+  </body>
+</html>

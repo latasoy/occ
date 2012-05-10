@@ -1,0 +1,5 @@
+<% content_for :head do %>
+  Editing Bug <%= "'#{@bug.key}'" unless @bug.key == '' %>
+<% end %>
+<%= render :partial => 'edit_bug_form', :locals =>
+  { :button_label => "Update",  :bug => @bug }%>

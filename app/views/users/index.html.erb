@@ -1,0 +1,28 @@
+<% content_for :head do %>
+  Users
+<% end %>
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu'%>
+<% end %>
+
+<table border="1">
+  <tr>
+    <th>___</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Level</th>
+    <th>Delete</th>
+  </tr>
+
+  <% @users.each do |user| %>
+    <tr align="center">
+      <td> <%= link_to_if user.url, image_tag(user.image, :class => 'user_icon'),
+          (url_for(user.url) if user.url) if user.image%> </td>
+      <td><%= link_to user.name, edit_user_path(user) if user.name  %></td>
+      <td><%= mail_to user.email if user.email  %></td>
+      <td><%= user.level %></td>
+      <td><%= button_to 'Delete',{ :action => "destroy", :id => user.id },
+  :method => :delete, :confirm => "Are you sure you want to delete#{user.name ? (' '+user.name) : ''}#{user.email ? " (#{user.email})" : ''}?"%></td>
+    </tr>
+  <% end %>
+</table>

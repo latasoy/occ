@@ -1,0 +1,9 @@
+<% content_for :head do %>
+  Editing Test List <%= "'#{@list.name}'" unless @list.name == ''%>
+<% end %>
+<% content_for :navigation do %>
+  <%= render :partial => 'list_footer' , :locals => { :list => @list }%>
+<% end %>
+
+<%= render :partial => 'edit_list_form', :locals =>
+  { :button_label => "Update",  :list => @list }%>

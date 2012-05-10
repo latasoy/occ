@@ -1,0 +1,26 @@
+require 'oats/rclient' # Called via machine to communicate with rserver
+require 'oats/oats_data' # Called below
+require 'oats/roptions' # Called below
+require 'oats/oats' #  Interface methods to user methods implemented in other modules
+require 'oats/test_data' # Needed to unmarshal oats_info object in rclient
+
+#require 'jruby-openssl'
+unless ENV['HOSTNAME']
+  if ENV['OS'] == 'Windows_NT'
+    ENV['HOSTNAME'] = ENV['COMPUTERNAME']
+  else
+    ENV['HOSTNAME'] = `hostname`.chomp
+  end
+end
+
+Oats.assert ENV['OATS_HOME'], "OATS_HOME environment variable is not defined."
+$log = Rails.logger
+$oats = OatsData.load #(ini_file)
+Roptions.override #(options)
+
+#ObjectSpace.each_object(Mongrel::HttpServer) do |i|
+#  OCC::mongrel_port = i.port
+#  raise "Port could not be introspected!" unless OCC::mongrel_port and OCC::mongrel_port.to_i > 0
+#end
+#logger 'MONGREL PORT is: ' + Mongrel::HttpServer.port
+

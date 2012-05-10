@@ -1,0 +1,55 @@
+<table border="1">
+  <tr>
+    <th>Environment</th>
+    <th>Last</th>
+    <th>Run</th>
+    <%= render :partial => 'erequests/job_summary_headers' %>
+    <th>First Started</th>
+    <th>Last Finished</th>
+  </tr>
+  <% unfinished_jobs = nil
+  environments.each do |env|
+    #if env.changed? # Use caching for performance of the home page when there are many environments.
+    env.changed? # This avoids the bug by recalculating summary each time, but it
+    # needs to be called to set unfinished_jobs, otherwise screws up the start -> stop transition
+    jobs = latest_jobs || Job.latest_jobs_for_env(env)
+    starts = jobs.collect{|j|j.started_at if j.started_at}
+    starts.delete(nil)
+    env.first_started = starts.min
+    finishes = jobs.collect{|j|j.finished_at if j.finished_at}
+    finishes.delete(nil)
+    env.last_finished = finishes.max
+    env.sum_row = render :partial => 'erequests/job_summary_columns',
+      :locals => { :job_summary_array => Erequest.job_summary(jobs), :model => env}
+    if env.unfinished_jobs.nil? or env.unfinished_jobs.empty?
+      env.unfinished_jobs = nil
+      env.started_at = nil # needed for transactionality
+      env.save
+    end
+    unfinished_jobs = env.unfinished_jobs
+    #end
+    %>
+    <tr align="center" >
+      <td><%= link_to env.name, environment_path(env) %></td>
+      <td><%= link_to(env.last_start_erequest.id , erequest_path(env.last_start_erequest)) if env.last_start_erequest %></td>
+      <td>
+        <% if env.unfinished_jobs %>
+          <%= button_to 'Stop', stop_environment_path(env), :method => :get, :disable_with => 'Stopping...' %>
+        <% else %>
+          <%= button_to 'Start', start_environment_path(env), :method => :get, :disable_with => 'Starting...' %>
+        <% end %>
+      </td>
+      <%= env.sum_row %>
+      <td> <%= env.first_started.strftime(Job::DF) if env.first_started%>  </td>
+      <td> <%= env.last_finished.strftime(Job::DF) if env.last_finished%>  </td>
+    </tr>
+  <% end %>
+</table>
+<% if unfinished_jobs and environments.size == 1 %>
+  <br/>
+  <%= form_tag '/lists/run', :id => 'lists_run' %>
+  <%= submit_tag 'Stop Jobs', :disable_with => 'Submitting..' %>
+  <%= @lists_run_job_tag = 'unfinished_job'
+  render :partial => 'jobs/jobs_table', :locals => { :jobs => unfinished_jobs } %>
+<% end %>
+<br/>

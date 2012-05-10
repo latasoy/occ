@@ -1,0 +1,35 @@
+
+<% if erequest.command == 'start'%>
+  <%= render :partial => 'erequests/erequests_table', :locals => { :erequests => [erequest]} %> <br/>
+
+  <% if not erequest.jobs.empty?
+    if controller.class == JobsController and controller.action_name == 'show'
+      jobs = [@job]
+    else
+      jobs = erequest.jobs
+    end %>
+    <%= render :partial => 'lists/lists_run'%>
+    <%#= hidden_field_tag 'erequest_id', erequest.id %>
+    <%#= submit_tag(Job.unfinished_for_erequest_id(erequest.id).empty? ? 'Rerun' : "Stop" ) %>
+    <%#*all jobs for Run-<%= erequest.id %>
+    <%#= link_to 'Rerun'+txt, rerun_erequest_path(erequest) %>
+    <%#= link_to "Stop"+txt, stop_erequest_path(erequest) %>
+    <%= render :partial => 'jobs/jobs_table', :locals => { :jobs => jobs } %>
+    <% unless controller.class == JobsController and controller.action_name == 'show'
+      @environment = erequest.environment # provides the default for list%>
+    <% end %>
+  <% else %>
+    <b>No jobs were created for erequest [<%=erequest.id%>].</b>
+  <%end%>
+
+<% else %>
+  <table>
+    <tr>
+      <td><b><%= erequest.command.upcase %> Erequest :</b></td>
+      <td><%= erequest.id %> </td>
+    </tr>
+    <tr> <td><b>Environment:</b></td> <td><%=h erequest.environment.name %></td> </tr>
+    <tr><td><b>Creation time:</b></td> <td> <%= erequest.created_at.strftime(Job::DF) %></td> </tr>
+  </table>
+
+<%end%>

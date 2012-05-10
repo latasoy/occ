@@ -1,0 +1,5 @@
+<% content_for :head do %>
+  New Bug 
+<% end %>
+<%= render :partial => 'edit_bug_form', :locals =>
+  { :button_label => "Create",  :bug => @bug ,  :jobtest => @jobtest }%>

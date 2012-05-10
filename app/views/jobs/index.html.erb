@@ -1,0 +1,8 @@
+<% content_for :head do %>
+  All Jobs
+<% end %> 
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu'%>
+<% end %> 
+<%= render :partial => 'jobs_table', :locals =>
+  { :jobs => @jobs } %>

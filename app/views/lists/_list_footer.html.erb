@@ -1,0 +1,13 @@
+<%  if list and list.id and list.instance_of?(List) and list.name  # skip for new or txt lists%>
+  <%= link_to 'Edit List', edit_list_path(list) %>|
+  <%= link_to 'Executed |', jobs_list_path(list) %>
+<% end %>
+<%= link_to 'New', new_list_path %> |
+<%= link_to 'All Lists', all_lists_path %> |
+<% if list.nil? or list.instance_of?(List) %>
+  <% # For some reason  partial does not work for else condition below %>
+  <%= render :partial => 'environments/home_menu' %>
+<% else %>
+  <br/>
+  <br/>
+<% end %>

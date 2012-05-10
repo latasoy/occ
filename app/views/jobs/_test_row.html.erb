@@ -1,0 +1,58 @@
+<%
+no_result = tst['result'].nil?
+tst_id = tst['id']
+tst_timed_out = tst['timed_out']
+tst_error_capture_file = tst['error_capture_file']
+tst_end_time = tst['end_time']
+tst_start_time = tst['start_time']
+status_str = case tst['status']
+when 0 then  "pass"
+when 1
+  if no_result
+    "Not Executed"
+  else
+    url = job.url(tst_id+'/'+tst_error_capture_file) if tst_error_capture_file
+    link_to_if tst_error_capture_file, tst_timed_out ? "Timeout" : "Failed", url_for(url)
+  end
+when 2
+  "Skipped"
+end %>
+<% if controller.action_name =~ /failed/ %>
+  <td align="left"><%=link_to(job.id, job_path(job)) %></td>
+  <td align="left"><%=link_to( job.list_name, list_path(job.list)) %></td>
+<% end %>
+<td align="left"><%= link_to_unless no_result, tst_id , url_for(job.url(tst_id+'/oats_test.log')) %></td>
+<td> <%= status_str %> </td>
+<td><%= link_to_unless no_result, Time.at(tst_start_time).strftime(Job::DF), \
+    url_for(job.url(tst_id)) %></td>
+<td><%= tst_end_time - tst_start_time if tst_start_time and tst_end_time%></td>
+<td><%= bug_str = ''
+  jobtest, differ = job.bug_different tst
+  if jobtest
+    bug = jobtest.bug
+    bug_jobtests = bug.jobtests
+    cnt = bug_jobtests.active.count;
+    bug_str << link_to(bug.key, url_for(bug.url))
+    bug_str << ' ' + link_to("has #{fail_count = bug_jobtests.failing.count}/#{cnt} test(s)", bug_path(bug)) if cnt > 0
+    bug_str << ' ' + link_to('introduced', job_path(jobtest.job)) unless job.id == jobtest.job.id
+
+    if differ and tst['status'] != 0
+      bug_str << ' ' + link_to('REPLACE', new_bug_path(:job => job, :testid => tst_id))
+    elsif job.id == jobtest.job.id
+      bug_str << ' ' + link_to('DELETE', remove_bug_job_path(job, :testid => tst_id))
+    end
+    if tst['status'] == 0
+      if fail_count == 1 and not jobtest.passed
+        bug_str << ' ' + link_to('DELETE BUG',  { :controller => 'jobs', :action => "pass", :id => job.id,:jobtest_id => jobtest.id  },
+          :method => :get, :confirm => "Is bug #{bug.key} closed?")
+        #bug_str << ' ' + link_to('DELETE BUG',  { :controller => 'bugs', :action => "destroy", :id => bug.id },
+          #:method => :delete, :confirm => "Is bug #{bug.key} fixed?")
+      else
+        bug_str << ' ' + link_to('FIXED', pass_job_path(job, :jobtest_id => jobtest.id))
+      end
+    end
+  else
+    bug_str << link_to('ADD', new_bug_path(:job => job, :testid => tst_id)) if differ #tst_status == 1 and ! no_result
+  end
+  bug_str.html_safe %>
+</td>

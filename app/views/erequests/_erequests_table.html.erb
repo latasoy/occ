@@ -1,0 +1,14 @@
+<table border="1">
+  <tr>
+    <th>RunID</th>
+    <th>Environment</th>
+    <%= render :partial => 'erequests/erequest_column_headers' %>
+  </tr>
+  <% erequests.each do |erequest| %>
+    <tr align="center">
+      <td><%= link_to erequest.id , erequest_path(erequest) %></td>
+      <td><%= env = erequest.environment;link_to env.name, environment_path(env) %></td>
+      <%= render :partial => 'erequests/erequest_columns', :locals => { :erequest => erequest} %>
+    </tr>
+  <% end %>
+</table>

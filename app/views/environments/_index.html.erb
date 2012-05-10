@@ -1,0 +1,31 @@
+<% content_for :navigation do %>
+  <%= link_to 'New environment', new_environment_path %> |
+  <%= render :partial => 'home_menu'%>
+<% end %>
+<table border="1">
+  <tr>
+    <th>Environment</th>
+    <th>Edit</th>
+    <th>(Un)Delete</th>
+    <th>Lists</th>
+    <th>Run Options</th>
+    <th>Agents</th>
+    <th>File</th>
+  </tr>
+  <% environments.each do |env|
+  %>
+    <tr align="center" >
+      <td><%= link_to env.name, environment_path(env) %></td>
+      <td><%= link_to 'Edit', edit_environment_path(env) %></td>
+      <td><% if env.deleted_at %>
+          <%= button_to env.deleted_at.strftime(Job::DF), undelete_environment_path(env) %>
+        <% else %>
+          <%= button_to 'Delete',  { :action => "destroy", :id => env.id }, :method => :delete%>
+        <% end %>
+      <td><%= env.lists.size %></td>
+      <td><%= env.run_options %></td>
+      <td><%= env.agents %></td>
+      <td><%= env.file %></td>
+    </tr>
+  <% end %>
+</table>

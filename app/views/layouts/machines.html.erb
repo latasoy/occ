@@ -1,0 +1,4 @@
+<% content_for :title do %>
+  OCC Machines: <%= controller.action_name %> <%= @machine.name if @machine %>
+<% end %>
+<%= render :template => 'layouts/application' %>
