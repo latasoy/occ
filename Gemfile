@@ -22,6 +22,7 @@ gem 'eventmachine'
 
 if ENV['OS'] == 'Linux' # Seems to be needed by Ubuntu-- For OCC or OATS?
   gem 'execjs'
+  gem 'rake'
   gem 'therubyracer'
 end
 

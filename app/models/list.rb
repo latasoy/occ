@@ -27,7 +27,7 @@ class List < ActiveRecord::Base
 
   def List.url(name)
     nam, extension = List.name_extension(name)
-    path = TestData.locate(nam)
+    path = Oats::TestData.locate(nam)
     path ? ResultsServer + path.sub(/.*(\/oats\/tests\/.*)/,'\1') : nil
   end
 
@@ -86,14 +86,14 @@ class List < ActiveRecord::Base
     errs = []
     tests_array = []
     begin
-      file = TestData.locate(nam)
+      file = Oats::TestData.locate(nam)
       raise "Can not locate test #{nam}" unless file
       case extension
       when 'yml'
         yaml = YAML.load_file(file)
         tests_array = yaml['execution'] ? yaml['execution']['test_files'] : []
       when 'txt'
-        tests_array = TestList.txt_tests(file)
+        tests_array = Oats::TestList.txt_tests(file)
       else
         raise "Extension for #{nam} has to be yml or txt"
       end

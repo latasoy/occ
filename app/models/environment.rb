@@ -10,7 +10,7 @@ class Environment < ActiveRecord::Base
   validate :file_exists
 
   def file_exists
-    errors.add('file',"Can not locate #{file_name}") unless TestData.locate(file_name + '.yml')
+    errors.add('file',"Can not locate #{file_name}") unless Oats::TestData.locate(file_name + '.yml')
   end
 
   def file_name

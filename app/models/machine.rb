@@ -222,7 +222,7 @@ class Machine < ActiveRecord::Base
     begin
       # load 'rclient.rb' # debug
       EventMachine::run {
-        conn = EventMachine::connect name, port, Rclient, nickname, agent_request
+        conn = EventMachine::connect name, port, Oats::Rclient, nickname, agent_request
         # Need to terminate effort in case host name or else is bad.
         EM.add_timer($oats['execution']['occ']['timeout_waiting_for_agent']) {conn.close_connection }
       }

@@ -3,6 +3,7 @@ require 'oats/oats_data' # Called below
 require 'oats/roptions' # Called below
 require 'oats/oats' #  Interface methods to user methods implemented in other modules
 require 'oats/test_data' # Needed to unmarshal oats_info object in rclient
+require 'oats/report' # Used in views/jobs/_jobs_table.html.erb ot get failed file nane
 
 #require 'jruby-openssl'
 unless ENV['HOSTNAME']
@@ -15,8 +16,8 @@ end
 
 Oats.assert ENV['OATS_HOME'], "OATS_HOME environment variable is not defined."
 $log = Rails.logger
-$oats = OatsData.load #(ini_file)
-Roptions.override #(options)
+$oats = Oats::OatsData.load #(ini_file)
+Oats::Roptions.override #(options)
 
 #ObjectSpace.each_object(Mongrel::HttpServer) do |i|
 #  OCC::mongrel_port = i.port

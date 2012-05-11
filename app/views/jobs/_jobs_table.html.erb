@@ -62,7 +62,7 @@
         end
       %></td>
       <td> <%= job.pass if testlist and job.pass != 0 %> </td>
-      <td> <%= link_to(job.fail, url_for(job.url(Report.failed_file_name(job.list_name)))) \
+      <td> <%= link_to(job.fail, url_for(job.url(Oats::Report.failed_file_name(job.list_name)))) \
           if testlist and job.fail and job.fail != 0 %> </td>
       <td> <%=
         diff = job.bugs_failed

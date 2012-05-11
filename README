@@ -22,6 +22,18 @@ OATS dir_tests/lists Folder.
 The user also associates each Environment in OCC with a set of Lists selected via 
 the OCC GUI.
 
+== Installation Steps on UBUNTU
+- Install ruby 1.8 and rubygems
+- Install mysql server
+- For remote mysql access,
+    - comment out local Bind Address from /etc/mysql/my.conf
+    - mysql -u root -e "grant all privileges on *.* to 'root'@'%' identified by 'PASSWD' ; "
+    - service mysql restart
+- Install 'libmysqlclient-dev' package for mysql2 gem
+- git clone https://github.com/latasoy/occ
+- cd occ; sudo bundle install
+
+
 == Executing Test Lists on an Environment
 
 When an environment is ready to test, the user would issue the 'Start' request on 
@@ -118,4 +130,3 @@ As a result, OCC expects to see a relatively current version of oats folder. In
 addition to some shared classes from the oats/lib folder, it also uses some scripts 
 in the oats/bin, the occ configuration entries in oats/test/oats.yml, and the 
 oats/test/list folder to display the current test contents of lists.
- 
