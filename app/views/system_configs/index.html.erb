@@ -14,7 +14,7 @@
     <td><%= system_config.name %></td>
     <td><%= system_config.value %></td>
     <td><%= link_to 'Edit', edit_system_config_path(system_config) %></td>
-    <td><%= link_to 'Destroy', system_config, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Destroy', system_config, :confirm =>'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
