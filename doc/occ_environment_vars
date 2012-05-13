@@ -1,15 +1,22 @@
-# If defined, will redirect occ entry to this URL
-# Google_oauth2 requires fixed domain call-back
-export OCC_SERVER_HOST_QUALIFIED=occ_fully_qualified_host_name.com
+#!/bin/bash
 
 # Configs shared by OATS agent and OCC
-[ "$OATS_HOME" ] || export OATS_HOME=$HOME/oats
-export OATS_GIT_REPOSITORY='http://github.my.com/oats'
-#export OATS_SVN_REPOSITORY='https://svn.my.com/oats'
+export OATS_HOME=$HOME/oats  # Set this to where oats resides, cloned or as GEM
+export OATS_TESTS=$HOME/oats/oats_tests # Modify this to point to your tests
+
+# Rails Session authentication
+# Optionally regenerate a new one via 'cd occ; rake secret'
+export COOKIE_SECRET=e2739f9724828c76a9b4da551ef245219b836f5f33efa40a06e6149efe5ccfd45f8c15e592885a8984a01cbe8f7e347cdcf683dad798888d2027625fb66f85c8
 
 # Google auth registration
 export GOOGLE_KEY=xxxxxxxxxxxx.apps.googleusercontent.com
 export GOOGLE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxx
 
-# Session authentication
-export COOKIE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# If defined, will redirect occ entry to this URL
+# Google_oauth2 requires fixed domain call-back
+export OCC_SERVER_HOST_QUALIFIED=occ_fully_qualified_host_name.com
+
+# Set these for OCC and OATS agents to auto-update the OATS_TESTS 
+#export OATS_GIT_REPOSITORY='http://github.my.com/oats' # Repository of your tests
+
+

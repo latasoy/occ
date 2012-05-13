@@ -6,6 +6,111 @@ installed on client windows machines. The main components of OCC are the Ruby,
 RoR, MySQL, and WebServer. The basic use case for OCC is to request execution of
 one or more test Lists on a particular test Environment.
 
+
+== FEATURES
+
+As each Job completes, OCC collects the results, calculate execution statistics and
+summary of results for display.
+
+The user can also issue a Stop request for an Environment.  OCC would then
+remove all Jobs associated with that Environment from the queue and also send a
+"Stop" request to the all agents currently executing associated Jobs.  After
+receiving this request, each Agent will finish the currently executing test but
+execute no more tests for that job, report the results to OCC, and be available for
+other Jobs.
+
+OCC also provides several other user features such as reissuing a Run request
+(including all associated Jobs), requesting rerun of a specific Job, etc.
+
+OCC also employs automatic rerun logic, which reruns a Job if it the number of
+failures seen for the test List is more than the previous execution on the same
+environment.
+
+The testers can drill down from the summary execution display and look at
+individual test results, log files, and other test artifacts for a particular Job.
+
+
+== INSTALLATION OF COMPONENTS
+
+Installing OCC on Linux or Mac is recommended.
+
+= Install OATS, Ruby, and NetBeans as described in README.txt of
+  https://github.com/latasoy/oats.
+
+  Make sure OATS_HOME/bin is in your PATH, where OATS_HOME is where oats gem is
+  installed or oats is cloned from github
+
+= Install Mysql server
+
+ - On Ubuntu,
+   - Also install 'libmysqlclient-dev' package needed by mysql2 gem
+   - sudo update-rc.d mysql defaults # To start mysql on reboot
+
+ -  On Mac
+   - export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
+   - On Mac make sure NetBeans environment also contains the DYLD_LIBRARY_PATH
+     (Include 'source ~/.profile' to the  ...bin/netbeans script.)
+
+
+ - Do the following if you want to enable remote access to  mysql DB)
+  - Comment out local Bind Address from /etc/mysql/my.conf
+  - mysql -u root -e "grant all privileges on *.* to 'root'@'%' identified by 'PASSWD' ; "
+  - service mysql restart
+
+= Install and Configure OCC
+
+The steps below presume that you are familiar with the basic concepts and
+operation of Ruby on Rails applications in general.
+
+ - git clone https://github.com/latasoy/occ
+ - cd occ; (sudo) bundle install
+
+ - Add Oats.data execution.occ.hostname entry into oats_user.yml and set it
+   to hostname of OCC machine
+
+ - cp occ/doc/occ_environment_vars $HOME
+ - echo 'source $HOME/occ_environment_vars' >> $HOME/.profile
+ - Modify the contents of $HOME/occ_environment_vars as indicated.
+
+ - Adjust the password, username, and host entries in  occ/config/database.yml
+ - cd occ; rake db:setup # Create the DB schema. Type 'rake -T' for all options.
+
+ - Start OCC by typing 'occ' (occ script is in OATS_HOME/bin, which should be in
+    the path)
+
+
+== WebServer
+
+OCC produces and displays the job summary tables from the intermediate and
+final tests results data it receives from the OATS agents and saves it in its
+database.
+
+OCC does not, however, display the test log files or any other test artifact files
+directly, but delegates it to a WebServer  which has direct access to the test result
+directories residing on the client machines. The name of the web server is indicated
+by execution.occ.results_webserver entry of the oats.yml file.
+
+For this redirection to work, you should install Apache on each agent machine. See
+the instructions in OATS_HOME/doc/oats_httpd.conf
+
+== Other Setup and Configuration Steps
+
+The WebServer  is also used for displaying the contents of test directories and files
+as redirected by OCC. The contents of such files or directories may be out of date,
+unless these directories are regularly updated from code repositories.  OCC also
+relies on some code shared from oats folder.  Unless OCC is configured to perform
+such updates automatically, you should manually update these folders to contain
+the latest OATS/OCC Framework code as well as directory of tests of Application
+Under Test (AUT)
+
+As a result, OCC expects to see a relatively current version of oats folder. In
+addition to some shared classes from the oats/lib folder, it also uses some scripts
+in the oats/bin, the occ configuration entries in oats/test/oats.yml, and the
+oats/test/list folder to display the current test contents of lists.
+
+
+==  USAGE
+
 You should be familiar with OATS before you use OCC. For further information on
 OATS, please refer to README.txt for OATS (https://github.com/latasoy/oats.)
 
@@ -15,118 +120,28 @@ environments it finds in the dir_tests/environments folder into the OCC DB. The
 user should enter any subsequently defined Environment of interest should be
 entered via the OCC GUI.
 
-Before using OCC, the user is also expected to enter the test Lists of interest via 
-the OCC GUI.  Each Lists name should match exactly to a test list file is defined in 
-OATS dir_tests/lists Folder.
-
-The user also associates each Environment in OCC with a set of Lists selected via 
-the OCC GUI.
-
-== Installation Steps on UBUNTU
-- Install ruby 1.8 and rubygems
-- Install mysql server
-- For remote mysql access,
-    - comment out local Bind Address from /etc/mysql/my.conf
-    - mysql -u root -e "grant all privileges on *.* to 'root'@'%' identified by 'PASSWD' ; "
-    - service mysql restart
-- Install 'libmysqlclient-dev' package for mysql2 gem
-- git clone https://github.com/latasoy/occ
-- cd occ; sudo bundle install
-
-
 == Executing Test Lists on an Environment
 
-When an environment is ready to test, the user would issue the 'Start' request on 
-that environment via a link on the home page of OCC.  This 'Start' request is 
-suitable for initiating test after  automated deployment scripts, at the end of 
+Before using OCC, the user is also expected to enter the test Lists of interest via
+the OCC GUI.  Each Lists name should match exactly to a test list file is defined in
+OATS dir_tests/lists Folder.
+
+The user also associates each Environment in OCC with a set of Lists selected via
+the OCC GUI.
+
+When an environment is ready to test, the user would issue the 'Start' request on
+that environment via a link on the home page of OCC.  This 'Start' request is
+suitable for initiating test after  automated deployment scripts, at the end of
 deployment.  After receiving the Start request,
 
 1. OCC creates a Run request for this environment,
-2. OCC creates separate "Job" entries for each List to be executed, puts 
+2. OCC creates separate "Job" entries for each List to be executed, puts
 them in a DB queue, and associate them with the Run request
-3. OCC notifies each OATS agent to start pulling off Jobs from the job 
+3. OCC notifies each OATS agent to start pulling off Jobs from the job
 queue.
-4. Agents contact the OCC, request a Job, execute it, return results back 
-to OCC, and request the next Job until no Job is left in the 
-queue.  Agents go into waiting state if there are no more Jobs to 
+4. Agents contact the OCC, request a Job, execute it, return results back
+to OCC, and request the next Job until no Job is left in the
+queue.  Agents go into waiting state if there are no more Jobs to
 execute.
 
-== OCC Features
 
-As each Job completes, OCC collects the results, calculate execution statistics and 
-summary of results for display.
-
-The user can also issue a Stop request for an Environment.  OCC would then 
-remove all Jobs associated with that Environment from the queue and also send a 
-"Stop" request to the all agents currently executing associated Jobs.  After 
-receiving this request, each Agent will finish the currently executing test but 
-execute no more tests for that job, report the results to OCC, and be available for 
-other Jobs.
-
-OCC also provides several other user features such as reissuing a Run request 
-(including all associated Jobs), requesting rerun of a specific Job, etc.
-
-OCC also employs automatic rerun logic, which reruns a Job if it the number of 
-failures seen for the test List is more than the previous execution on the same 
-environment.
-
-The testers can drill down from the summary execution display and look at 
-individual test results, log files, and other test artifacts for a particular Job.
-
-== Installation of Components
-
-The components below can reside on separate machines.  The CPU and memory 
-requirements seem to be relatively minimal.
-
-== MySQL
-
-If you don't have a MySQL server, install one. On this server, create an RoR (Ruby 
-on Rails ) database named occ_production.  Schemas on this DB are created using 
-standard RoR tasks supplied with the OCC code.
-
-The creation of these DBs can be done via NetBeans RoR project creation.
-
-== Install & Configure OCC
-
-The steps below presume that you are familiar with the basic concepts and 
-operation of Ruby on Rails applications in general.
-
-1. Clone the occ and oats code from github.
-2. Install OATS, Ruby, and Netbeans as described in OATS Readme.
-3. Run bundler install in occ folder
-4. Modify the execution.occ entries of oats.yml to match your installation. 
-5. Adjust the entries in the occ/config/database.yml to point to occ_production 
-   and occ_development
-6. Run the rake task to do the RoR db:setup,which will create the DB schema
-7. Run database migration if necessary
-8. Now you can try running the OCC application from within NetBeans first.  To 
-   start OCC in production, use the occ script found in OATS_HOME/bin 
-
-== WebServer
-
-OCC produces and displays the job summary tables from the intermediate and 
-final tests results data it receives from the OATS agents and saves it in its 
-database.
-
-OCC does not, however, display the test log files or any other test artifact files 
-directly, but delegates it to a WebServer  which has direct access to the test result 
-directories residing on the client machines. The name of the web server is indicated 
-by execution.occ.results_webserver entry of the oats.yml file.
-
-For this redirection to work, you should install Apache on each agent machine. See 
-the instructions in OATS_HOME/doc/oats_httpd.conf 
-
-== Other Setup and Configuration Steps
-
-The WebServer  is also used for displaying the contents of test directories and files 
-as redirected by OCC. The contents of such files or directories may be out of date, 
-unless these directories are regularly updated from code repositories.  OCC also 
-relies on some code shared from oats folder.  Unless OCC is configured to perform 
-such updates automatically, you should manually update these folders to contain 
-the latest OATS/OCC Framework code as well as directory of tests of Application
-Under Test (AUT) 
-
-As a result, OCC expects to see a relatively current version of oats folder. In 
-addition to some shared classes from the oats/lib folder, it also uses some scripts 
-in the oats/bin, the occ configuration entries in oats/test/oats.yml, and the 
-oats/test/list folder to display the current test contents of lists.

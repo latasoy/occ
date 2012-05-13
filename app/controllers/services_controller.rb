@@ -3,6 +3,9 @@ class ServicesController < ApplicationController
   before_filter :ensure_domain, :only => :signin
   protect_from_forgery :except => :create     # see https://github.com/intridea/omniauth/issues/203
 
+  # services/signin and services/signup are passed directly to the view.
+
+
   # GET all authentication services assigned to the current user
   def index
     @services = current_user.services.order('provider asc')
@@ -31,6 +34,7 @@ class ServicesController < ApplicationController
       # Google gives new uid/session for same email if app is called from different UIDs
       @newuser = User.new
       @newuser.services.build(session[:authhash])
+      @newuser.level = 1 unless User.find_by_level(1) # User is created at level 1 if there are no level 1 users.
       if @newuser.save!
         # signin existing user
         # in the session his user id and the service id used for signing in is stored
