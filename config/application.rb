@@ -17,13 +17,8 @@ module Occ
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
-    rails_oats = File.expand_path('../oats', Rails.root)
-    oats_dir = ENV['OATS_HOME'] || rails_oats
-    unless File.directory?(oats_dir)
-      raise "There is no #{rails_oats}, and OATS_HOME environment variable is not defined." unless ENV['OATS_GIT_REPOSITORY']
-      `git clone #{ENV['OATS_GIT_REPOSITORY']} #{oats_dir}`
-    end
-    ENV['OATS_HOME'] = oats_dir
+    oats_dir = ENV['OATS_HOME'] || "#{Rails.root}/../oats"
+    `git clone #{ENV['OATS_GIT_REPOSITORY']} #{oats_dir}` if ENV['OATS_GIT_REPOSITORY'] and not File.directory?(oats_dir)
     config.autoload_paths += %W( #{oats_dir}/lib )
 
     # If defined, will redirect occ entry to this URL

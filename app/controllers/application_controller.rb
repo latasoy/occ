@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_service
 
   private
-  
+
   def current_service
     service_id = $oats['execution']['occ']['login_user_service_id'] || session[:service_id]
     @current_service ||= Service.find_by_id(service_id) if service_id
@@ -45,9 +45,7 @@ class ApplicationController < ActionController::Base
     if current_user
       # Only users above this level are allowed into the application
       # Set this to 1 to temporarily disable OCC access to non-admin users.
-      cutoff = SystemConfig.find_by_name(:user_level_cutoff)
-      raise "SystemConfig for user_level_cutoff is not initialized" unless cutoff
-      cutoff = cutoff.value
+      cutoff = SystemConfig.find_by_name(:user_level_cutoff).value
       if cutoff
         return true if current_user.level and  current_user.level <= cutoff.to_i
         flash[:error] = "OCC is currently undergoing maintenance. For questions, please contact occadmin@Your.org."

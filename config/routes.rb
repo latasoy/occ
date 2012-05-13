@@ -9,8 +9,8 @@ Occ::Application.routes.draw do
   resources :services, :only => [:index, :create, :destroy] do
     collection do
       get 'signin'
-      get 'signup'
       get 'signout'
+      get 'signup'
       post 'newaccount'
       get 'failure'
     end

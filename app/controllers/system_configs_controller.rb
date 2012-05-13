@@ -9,7 +9,7 @@ class SystemConfigsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @system_configs }
+      format.json { render json: @system_configs }
     end
   end
 
@@ -20,7 +20,7 @@ class SystemConfigsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @system_config }
+      format.json { render json: @system_config }
     end
   end
 
@@ -36,11 +36,11 @@ class SystemConfigsController < ApplicationController
 
     respond_to do |format|
       if @system_config.save
-        format.html { redirect_to @system_config, :notice => 'System config was successfully created.' }
-        format.json { render :json => @system_config, :status => :created, :location => @system_config }
+        format.html { redirect_to @system_config, notice: 'System config was successfully created.' }
+        format.json { render json: @system_config, status: :created, location: @system_config }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @system_config.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @system_config.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -52,11 +52,11 @@ class SystemConfigsController < ApplicationController
 
     respond_to do |format|
       if @system_config.update_attributes(params[:system_config])
-        format.html { redirect_to system_configs_url, :notice => 'System config was successfully updated.' }
+        format.html { redirect_to system_configs_url, notice: 'System config was successfully updated.' }
         format.json { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.json { render :json => @system_config.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @system_config.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -14,6 +14,7 @@ unless ENV['HOSTNAME']
   end
 end
 
+Oats.assert ENV['OATS_HOME'], "OATS_HOME environment variable is not defined."
 $log = Rails.logger
 $oats = Oats::OatsData.load #(ini_file)
 Oats::Roptions.override #(options)
