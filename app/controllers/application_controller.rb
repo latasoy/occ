@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   private
 
   def current_service
-    service_id = $oats['execution']['occ']['login_user_service_id'] || session[:service_id]
+    service_id = Occ::Application.config.occ['login_user_service_id'] || session[:service_id]
     @current_service ||= Service.find_by_id(service_id) if service_id
   end
 

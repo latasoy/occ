@@ -9,7 +9,7 @@ User.create([ {:level => 10, :uname => 'System', :password => 'SystemPass'}])
 
 if false  # Safer to create these manually from the GUI
   env_names = []
-  Dir.glob($oats['execution']['dir_tests'] + '/environments/*.yml') do |filename|
+  Dir.glob(ENV['OATS_TESTS'] + '/environments/*.yml') do |filename|
     env_names << File.basename(filename,'.*')
   end
   envs = []

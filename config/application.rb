@@ -19,8 +19,10 @@ module Occ
     # config.autoload_paths += %W(#{config.root}/extras)
     oats_dir = ENV['OATS_HOME'] || "#{Rails.root}/../oats"
     unless File.directory?(oats_dir)
-      `git clone #{ENV['OATS_GIT_REPOSITORY']} #{oats_dir}` if ENV['OATS_GIT_REPOSITORY']
+      raise "Can not locate OATS_HOME: #{oats_dir}" unless ENV['OATS_GIT_REPOSITORY']
+      `git clone #{ENV['OATS_GIT_REPOSITORY']} #{oats_dir}`
     end
+    ENV['OATS_HOME'] = oats_dir
     config.autoload_paths += %W( #{oats_dir}/lib )
 
     # If defined, will redirect occ entry to this URL

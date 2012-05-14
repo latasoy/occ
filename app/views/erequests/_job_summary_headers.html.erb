@@ -1,4 +1,4 @@
-<% $oats['execution']['build_versions'].each do |name| %>
+<% Occ::Application.config.occ['build_versions'].each do |name| %>
   <th> <%= name %> Build </th>
 <% end %>
 <th>Jobs</th>

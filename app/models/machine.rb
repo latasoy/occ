@@ -49,7 +49,7 @@ class Machine < ActiveRecord::Base
   def url(insert = nil)
     insert && insert = "#{insert}/"
     # Single webserver serving each agent machine name via an alias
-    webserver = $oats['execution']['occ']['results_webserver'] and
+    webserver = Occ::Application.config.occ['results_webserver'] and
       return "http://#{webserver}/#{name.sub(/\..*/,'')}/#{insert}#{nickname}/"
     # Each agent has its own webserver
     "http://#{name}/#{insert ? 'r' : 'a'}/#{nickname}/"
@@ -73,7 +73,7 @@ class Machine < ActiveRecord::Base
           if lines.last == @agent_log_last_lines
             @message << " Will not restart the agent since last line of log did not change after previous restart:\n #{lines.last}."
           else
-            if ENV['OS'] == 'Windows_NT' and lines.last !~ / \d\d:\d\d:\d\d \[RS/
+            if RUBY_PLATFORM =~ /mswin32/  and lines.last !~ / \d\d:\d\d:\d\d \[RS/
               # long running low level Ruby ops blocks eventmachine on Windows
               @message << " Will not restart the agent on Windows since since last line of log is:\n #{lines.last}"
             else
@@ -99,8 +99,8 @@ class Machine < ActiveRecord::Base
   end
 
   def get_agent_log
-    if $oats['execution']['occ']['results_webserver']
-      web_host = $oats['execution']['occ']['results_webserver']
+    if Occ::Application.config.occ['results_webserver']
+      web_host = Occ::Application.config.occ['results_webserver']
     else
       web_host = name
     end
@@ -130,7 +130,7 @@ class Machine < ActiveRecord::Base
     sleep init_secs = 2
     stat = nil
     for c in init_secs..max_secs do
-      sleep( ENV['OS'] == 'Windows_NT' ? 4 : 1 ) # W7 is much slower
+      sleep( RUBY_PLATFORM =~ /mswin32/ ? 4 : 1 ) # W7 is much slower
       stat = get_status(true)
       break unless stat == 'dead'
     end
@@ -212,8 +212,8 @@ class Machine < ActiveRecord::Base
 
   # No exceptions, but returns one of four status strings
   def issue_erequest(agent_request)
-    agent_request[:occ_host] = $oats['execution']['occ']['server_host']
-    agent_request[:occ_port] = $oats['execution']['occ']['server_port']
+    agent_request[:occ_host] = Occ::Application.config.occ['server_host']
+    agent_request[:occ_port] = Occ::Application.config.occ['server_port']
     agent_request[:info] = agent_info if agent_info
     agent_request[:user] ||= self.user.email if self.user
     #    agent_request[:password] = password
@@ -224,7 +224,7 @@ class Machine < ActiveRecord::Base
       EventMachine::run {
         conn = EventMachine::connect name, port, Oats::Rclient, nickname, agent_request
         # Need to terminate effort in case host name or else is bad.
-        EM.add_timer($oats['execution']['occ']['timeout_waiting_for_agent']) {conn.close_connection }
+        EM.add_timer(Occ::Application.config.occ['timeout_waiting_for_agent']) {conn.close_connection }
       }
     rescue Exception => exc
       Rails.logger.info "ERROR: #{exc.message}"
@@ -258,11 +258,12 @@ class Machine < ActiveRecord::Base
   end
 
   def remexe(input_cmd = nil)
-    cmd = "agent -p #{port} -n #{nickname}"
+    cmd = "oats -a -p #{port} -n #{nickname}"
     cmd += " -u #{user.email}" if user
     cmd += ' ' + input_cmd if input_cmd
-    occ = $oats['execution']['occ']
+    occ = Occ::Application.config.occ
     if ENV['OS'] == 'Windows_NT'
+      raise 'NEED TO UPDATE THE CODE TO DO REMOTE WINDOWS ACCESS FROM OCC'
       remote_params = ''
       name == occ['server_host'] || remote_params = ' -u qa -p ' + occ['agent_mp'] + ' \\\\' + name
       FileUtils.mkdir_p Oats.result_archive_dir

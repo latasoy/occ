@@ -15,14 +15,14 @@ diff = diff.size
 #end
 
 ## The code below restarts selective build runs
-#$oats['execution']['build_versions'].each do |name|
-#$oats['execution']['build_versions'].each do |name|
+#Occ::Application.config.occ['build_versions'].each do |name|
+#Occ::Application.config.occ['build_versions'].each do |name|
 # <td> link_to_if build[name],  build[name], start_environment_path(model, :build => name) if build </td>
 # end
 #  link_to_if build[name],  build[name], start_environment_path(model, :build => name) if build
 %>
 
-<% versions = $oats['execution']['build_versions'].each do |name| %>
+<% versions = Occ::Application.config.occ['build_versions'].each do |name| %>
   <td> <%= build[name]if build %></td>
 <% end %>
 <td> <%= jobs if jobs  %></td>

@@ -20,7 +20,7 @@ gem 'omniauth-google-oauth2'  # google-auth.gem is no good. It asks for contacts
 gem "log4r"
 gem 'eventmachine'
 
-if ENV['OS'] == 'Linux' # Seems to be needed by Ubuntu-- For OCC or OATS?
+if RUBY_PLATFORM =~ /linux/ # Seems to be needed by Ubuntu-- For OCC or OATS?
   gem 'execjs'
   gem 'rake'
   gem 'therubyracer'

@@ -7,10 +7,10 @@ class List < ActiveRecord::Base
   scope :active, where(:deleted_at => nil)
   validate :list_exists
 
-  if $oats['execution']['occ']['results_webserver']
-    ResultsServer = 'http://' + $oats['execution']['occ']['results_webserver']
+  if Occ::Application.config.occ['results_webserver']
+    ResultsServer = 'http://' + Occ::Application.config.occ['results_webserver']
   else
-    ResultsServer = 'http://' + $oats['execution']['occ']['server_host']
+    ResultsServer = 'http://' + Occ::Application.config.occ['server_host']
   end
 
   def list_exists
@@ -37,11 +37,11 @@ class List < ActiveRecord::Base
 
   def List.test_info(tst_id)
     yaml = {}
-    file = File.join($oats['execution']['dir_tests'], tst_id, 'info.yml')
+    file = File.join(ENV['OATS_TESTS'], tst_id, 'info.yml')
     if File.exist?(file)
       yaml = YAML.load_file(file)
     else
-      file = File.join($oats['execution']['dir_tests'], tst_id)
+      file = File.join(ENV['OATS_TESTS'], tst_id)
       file = Dir.glob(File.join(file,'/*.rb')).first if tst_id !~ /.rb$/
       if file and File.exist?(file)
         cnt = 0
