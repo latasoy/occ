@@ -73,7 +73,7 @@ class Machine < ActiveRecord::Base
           if lines.last == @agent_log_last_lines
             @message << " Will not restart the agent since last line of log did not change after previous restart:\n #{lines.last}."
           else
-            if RUBY_PLATFORM =~ /mswin32/  and lines.last !~ / \d\d:\d\d:\d\d \[RS/
+            if RUBY_PLATFORM =~ /(mswin|mingw)/  and lines.last !~ / \d\d:\d\d:\d\d \[RS/
               # long running low level Ruby ops blocks eventmachine on Windows
               @message << " Will not restart the agent on Windows since since last line of log is:\n #{lines.last}"
             else
@@ -130,7 +130,7 @@ class Machine < ActiveRecord::Base
     sleep init_secs = 2
     stat = nil
     for c in init_secs..max_secs do
-      sleep( RUBY_PLATFORM =~ /mswin32/ ? 4 : 1 ) # W7 is much slower
+      sleep( RUBY_PLATFORM =~ /(mswin|mingw)/ ? 4 : 1 ) # W7 is much slower
       stat = get_status(true)
       break unless stat == 'dead'
     end
@@ -262,7 +262,7 @@ class Machine < ActiveRecord::Base
     cmd += " -u #{user.email}" if user
     cmd += ' ' + input_cmd if input_cmd
     occ = Occ::Application.config.occ
-    if ENV['OS'] == 'Windows_NT'
+    if RUBY_PLATFORM =~ /(mswin|mingw)/
       raise 'NEED TO UPDATE THE CODE TO DO REMOTE WINDOWS ACCESS FROM OCC'
       remote_params = ''
       name == occ['server_host'] || remote_params = ' -u qa -p ' + occ['agent_mp'] + ' \\\\' + name

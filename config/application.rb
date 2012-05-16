@@ -16,7 +16,6 @@ module Occ
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
     oats_dir = ENV['OATS_HOME'] || "#{Rails.root}/../oats"
     unless File.directory?(oats_dir)
       raise "Can not locate OATS_HOME: #{oats_dir}" unless ENV['OATS_GIT_REPOSITORY']

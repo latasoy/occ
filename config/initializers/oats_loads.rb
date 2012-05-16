@@ -4,7 +4,7 @@ require 'oats/test_data' # Needed to unmarshal oats_info object in rclient
 require 'oats/report' # Used in views/jobs/_jobs_table.html.erb ot get failed file nane
 
 unless ENV['HOSTNAME']
-  if RUBY_PLATFORM =~ /mswin32/
+  if RUBY_PLATFORM =~ /(mswin|mingw)/
     ENV['HOSTNAME'] = ENV['COMPUTERNAME']
   else
     ENV['HOSTNAME'] = `hostname`.chomp
@@ -23,8 +23,10 @@ Occ::Application.config.occ = {
   'timeout_waiting_for_agent' => 10,
   # Corresponds to the oats build versions
   'build_versions' => ['web'],
-  # OCC to redirect for serving static files. Default is each agent machine.
-  'results_webserver' => ENV['HOSTNAME'],
+  # OCC delegates to this for serving static files. By default each agent machine serves its own files.
+  # Set this if you want a single webserver serving results of eachagent machine names via an alias.
+  # Requires each agent results to be file-shared with the webserver
+  'results_webserver' => nil,
   # If set, bypass login request, and use this id to login all users for development w/o network access
   'login_user_service_id'    => nil # 2
 }
