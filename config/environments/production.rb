@@ -73,7 +73,7 @@ Occ::Application.configure do
     #    provider :facebook, 'APP_ID', 'APP_SECRET'
     #    provider :twitter, 'CONSUMER_KEY', 'CONSUMER_SECRET'
     #    provider :github, 'CLIENT ID', 'SECRET'
-    provider :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET']
+    provider :google_oauth2, Occ::Application.config.occ['google_key'], Occ::Application.config.occ['google_secret']
 
     # generic openid
     #    provider :openid, OpenID::Store::Filesystem.new('./tmp'), :name => 'openid'

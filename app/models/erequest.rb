@@ -247,15 +247,14 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
 
   def repo_version_update
     return if repo_version or command != 'start'
-    oats_dir = ENV['OATS_HOME'] || "#{Rails.root}/../oats"
-    Dir.chdir(oats_dir) do
+    Dir.chdir(Occ::Application.config.occ['dir_tests']) do
       try_count = 3
       begin
         cmd = nil
-        Timeout::timeout 3 do
+        Timeout::timeout 5 do
           if File.directory?('.git')
-            if ENV['OATS_GIT_REPOSITORY']
-              origin = ENV['OATS_GIT_REPOSITORY'] # || 'origin'
+            if ENV['OATS_TESTS_GIT_REPOSITORY']
+              origin = ENV['OATS_TESTS_GIT_REPOSITORY'] # || 'origin'
               #        repo = `git remote -v`.chomp.split("\n").grep(/fetch/).first.sub(/origin\t(.*) \(fetch\)/,'\1')
               cmd = "git pull #{origin} master 2>&1"
               Rails.logger.info "Issuing git cmd: #{cmd}"
@@ -266,7 +265,7 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
                 return nil
               end
             # else  # Unset this to test the code when running w/o git access
-#              msg = "Undefined OATS_GIT_REPOSITORY"
+#              msg = "Undefined OATS_TESTS_GIT_REPOSITORY"
 #              self.message = msg
 #              Rails.logger.info msg
 #              return nil
@@ -280,7 +279,7 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
             Rails.logger.info "Last Git Commit: #{git_rev}"
             self.repo_version = git_rev
           else
-            repo = Occ::Application.config.svn_repository
+            repo = Occ::Application.config.occ['svn_repository']
             cmd = "svn info #{repo}"
             Rails.logger.info "Issuing svn cmd: #{cmd}"
             svn_out = `#{cmd}`
@@ -293,10 +292,11 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
         msg = "Timed out waiting for [#{cmd}]. Retries left: #{try_count}"
         Rails.logger.info msg
         if try_count > 0
+          sleep 2
           retry
         end
         self.message = msg
-        return nil
+        return Time.now.to_i
       end
     end
   end

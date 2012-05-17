@@ -71,7 +71,7 @@ class ApplicationController < ActionController::Base
 
   # Make sure users come in via standard fully-qualified domain, needed for Google_oauth2
   def ensure_domain
-    server_full = ENV['OCC_SERVER_HOST_QUALIFIED'] # Define only for prod environment
+    server_full = Occ::Application.config.occ['occ_server_host_qualified']
     return unless server_full
     host = request.env['HTTP_HOST']
     app_domain = host.sub(/.*:/,server_full+':')

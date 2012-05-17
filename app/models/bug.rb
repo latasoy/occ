@@ -4,7 +4,6 @@ class Bug < ActiveRecord::Base
   validates_uniqueness_of :key, :case_sensitive => false
   before_validation :downcase_key
   scope :active, where(:deleted_at => nil)
-  JiraHost = 'jira.your.org'
 
   # Commented for now since with new Jira even read-only requires login.
   # Uncomment once a safe read-only user/password can be used in configs.
@@ -27,7 +26,7 @@ class Bug < ActiveRecord::Base
   #  end
 
   def url
-    "http://#{JiraHost}/browse/#{key}"
+    Occ::Application.config.occ['bug_url_prefix'] + key
   end
 
   protected

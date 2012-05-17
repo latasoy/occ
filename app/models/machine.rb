@@ -95,6 +95,8 @@ class Machine < ActiveRecord::Base
   end
 
   def agent_log_url
+    # logfile may be empty right after start, since we don't wait the response and refresh quickly.
+    # dated file will show up upon refresh.
     url+'agent_logs/'+(%w(dead starting).include?(self.persisted_status) ? 'agent.log' : (logfile ? logfile : ''))
   end
 
@@ -271,7 +273,7 @@ class Machine < ActiveRecord::Base
         remote_params + " #{occ['bash_path']} " + cmd
     else
       if name == ENV['HOSTNAME'] or name == occ['server_host']
-        return cmd # File.executable?(cmd.sub(/ .*/,'')) ? "bash -c '#{cmd}'" : (ENV['OATS_HOME'] + "/bin/#{cmd}")
+        return cmd
       else
         return "ssh #{name} oats/bin/#{cmd}"
       end

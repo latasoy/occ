@@ -9,13 +9,14 @@ gem 'mongrel', '>= 1.2.0.pre2'
 #export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 #sudo env ARCHFLAGS="-arch x86_64" /usr/bin/gem install --no-rdoc --no-ri mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 gem 'mysql2'
-
 gem 'omniauth'
 gem 'omniauth-openid' # For Yahoo, also google/openid
 gem 'omniauth-google-oauth2'  # google-auth.gem is no good. It asks for contacts.
 #gem 'omniauth-facebook'
 #gem 'omniauth-twitter'
 #gem 'omniauth-github'
+
+gem 'oats' unless ENV['OATS_DEVELOPMENT']
 
 gem "log4r"
 gem 'eventmachine'

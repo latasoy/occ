@@ -1,23 +1,24 @@
 #/bin/bash
 
-# Define if oats is not under your $HOME, $HOME/NetBeansProjects, or next to occ
-#export OATS_HOME=$HOME/NetBeansProjects/oats
+# See .../occ/config/initializers/oats.rb for explanations and more configuration
+# parameters
+
+# **** THESE MUST BE DEFINED ****
+
+# Session authentication. generate this by 'rake secret' in OCC folder
+export COOKIE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # Location of your oats_tests, for oats agents running locally on OCC_HOST
 # export OATS_TESTS=$HOME/oats_tests
 
+
+# *** THESE ARE OPTIONAL ***
+
+# Need to define only if you also want to use Google Auth2
 # If defined, will redirect occ entry to this URL
 # Google_oauth2 requires fixed domain call-back
-export OCC_SERVER_HOST_QUALIFIED=occ_fully_qualified_host_name.com
-
-# Configs shared by OATS agent and OCC
-[ "$OATS_HOME" ] || export OATS_HOME=$HOME/oats
-export OATS_GIT_REPOSITORY='http://github.my.com/oats'
-#export OATS_SVN_REPOSITORY='https://svn.my.com/oats'
-
+#export OCC_SERVER_HOST_QUALIFIED=occ_fully_qualified_host_name.com
 # Google auth registration
-export GOOGLE_KEY=XXX.apps.googleusercontent.com
-export GOOGLE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxx
+#export OATS_GOOGLE_KEY=XXX.apps.googleusercontent.com
+#export OATS_GOOGLE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxx
 
-# Session authentication
-export COOKIE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
