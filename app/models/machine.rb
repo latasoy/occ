@@ -52,7 +52,7 @@ class Machine < ActiveRecord::Base
     webserver = Occ::Application.config.occ['results_webserver'] and
       return "http://#{webserver}/#{name.sub(/\..*/,'')}/#{insert}#{nickname}/"
     # Each agent has its own webserver
-    "http://#{name}/#{insert ? 'r' : 'a'}/#{nickname}/"
+    "http://#{name}/#{insert ? 'oats/r' : 'oats/a'}/#{nickname}/"
   end
 
   # Ask machine for status and persist actual latest status

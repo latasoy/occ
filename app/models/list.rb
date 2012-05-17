@@ -14,7 +14,7 @@ class List < ActiveRecord::Base
   end
 
   def list_exists
-    test_count(true) unless name == ''
+    test_count(true) unless name == '' 
   end
 
   def jobtest_with_testid(testid)
@@ -76,6 +76,7 @@ class List < ActiveRecord::Base
   # Returns array of tests or an error string
   def testfiles(is_refresh = false)
     return @test_files if @test_files and not is_refresh
+    return @test_files =[ name ] if name =~ /\.xlw$/  # TO-DO implement better listing of xlw files
     @test_files, error_array = List.testfiles(self.name)
     error_array.each {|e| errors.add('Name:',e)}
     return @test_files

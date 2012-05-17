@@ -16,7 +16,8 @@ gem 'omniauth-google-oauth2'  # google-auth.gem is no good. It asks for contacts
 #gem 'omniauth-twitter'
 #gem 'omniauth-github'
 
-gem 'oats' unless ENV['OATS_DEVELOPMENT']
+# Include gem unless there is a parallel oats directory.
+gem 'oats' unless File.directory? File.expand_path('../../oats', __FILE__)
 
 gem "log4r"
 gem 'eventmachine'
