@@ -26,6 +26,7 @@ class Bug < ActiveRecord::Base
   #  end
 
   def url
+    return nil unless key
     Occ::Application.config.occ['bug_url_prefix'] + key
   end
 

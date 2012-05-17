@@ -251,7 +251,8 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
       try_count = 3
       begin
         cmd = nil
-        Timeout::timeout 5 do
+        sec = 5
+        Timeout::timeout sec do
           if File.directory?('.git')
             if ENV['OATS_TESTS_GIT_REPOSITORY']
               origin = ENV['OATS_TESTS_GIT_REPOSITORY'] # || 'origin'
@@ -281,7 +282,7 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
           else
             repo = Occ::Application.config.occ['svn_repository']
             cmd = "svn info #{repo}"
-            Rails.logger.info "Issuing svn cmd: #{cmd}"
+            Rails.logger.info "Issuing SVN cmd: #{cmd}"
             svn_out = `#{cmd}`
             Rails.logger.info svn_out
             self.repo_version = svn_out.chomp.split("\n").grep(/Last Changed Rev:/).collect{|i| i.sub(/.* /,'')}.max
@@ -289,14 +290,14 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
         end
       rescue Timeout::Error
         try_count -= 1
-        msg = "Timed out waiting for [#{cmd}]. Retries left: #{try_count}"
+        msg = "Timed out after #{sec} secconds waiting for [#{cmd}]. Retries left: #{try_count}"
         Rails.logger.info msg
         if try_count > 0
-          sleep 2
+          sleep 1
           retry
         end
         self.message = msg
-        return Time.now.to_i
+        return nil
       end
     end
   end

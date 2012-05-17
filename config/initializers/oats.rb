@@ -45,7 +45,7 @@ Occ::Application.config.occ = {
   # Define if using SVN for test repository
   'svn_repository'       => ENV['OATS_TESTS_SVN_REPOSITORY'] ,
   
-  # Define if using SVN for test repository
+  # Bugs will be displayed as a link using this 
   'bug_url_prefix'       => 'https://redmine.gr-apps.com/issues/' ,
   
   # Timeout for agent to respond, should respond quickly, unless dead
