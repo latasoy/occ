@@ -280,7 +280,7 @@ class Job < ActiveRecord::Base
           j = Job.where("id != #{job.id} and list_name = '#{job.list_name}' and
             environment_name = '#{job.environment_name}' and stop_erequest_id is null
             and is_results_final is not null").first
-          if j.tests # Sometimes receiving nil testlist
+          if j and j.tests # Sometimes receiving nil testlist, sometimes it fails the first time j is nil
             prev_fail = j.new_bug_cnt
             Rails.logger.info "[DEBUG] Previous failure count for job #{j.id} list #{j.list_name} is #{prev_fail} "
             if failed > prev_fail
@@ -313,14 +313,15 @@ class Job < ActiveRecord::Base
         # if not, ignore the request and restart the machine instead
         repo = jb.erequest.repo_version
         if repo and mach.repo_version and mach.repo_version != '' and
-            ((repo.size < 7 and repo.to_i > mach.repo_version.to_i) or
-              repo != mach.repo_version )# Git case, since it has more characters
+            ((repo.size < 7 and repo.to_i > mach.repo_version.to_i)  or # SVN Case
+              (repo.size >= 7 and repo != mach.repo_version) # Git case, since it has more characters
+             )
           restart_agent = true
           mach.agent_info = 'Restart due to repository version change'
-        elsif mach.job and mach.job.browser == 'firefox'
-          prev_job = Job.where("list_name = '#{jb.list_name}' AND is_results_final = 1 AND environment_name = '#{jb.environment_name}'").first # scoped desc
-          restart_agent = (prev_job.nil? or prev_job.browser != 'firefox') ? true : false
-          mach.agent_info = 'Restart due to browser change'
+#        elsif mach.job and mach.job.browser == 'firefox'
+#          prev_job = Job.where("list_name = '#{jb.list_name}' AND is_results_final = 1 AND environment_name = '#{jb.environment_name}'").first # scoped desc
+#          restart_agent = (prev_job.nil? or prev_job.browser != 'firefox') ? true : false
+#          mach.agent_info = 'Restart due to browser change'
         end
         if restart_agent
           mach.user = jb.erequest.user
