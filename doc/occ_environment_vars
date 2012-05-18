@@ -1,24 +1,52 @@
-#/bin/bash
+#!/bin/bash
+# This script should be included in environment via ~/la/bashrc
 
-# See .../occ/config/initializers/oats.rb for explanations and more configuration
-# parameters
+# See OCC_HOME/config/initializers/oats.rb for explanations and more
+# configuration parameters
 
 # **** THESE MUST BE DEFINED ****
-
-# Session authentication. generate this by 'rake secret' in OCC folder
-export OATS_COOKIE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# Set this because OATS must be installed in a writable/non-system location
+# GEM_HOME/bin must be in the path (this was done in ~/la/profile)
+export GEM_HOME=$HOME/gems
 
 # Location of your oats_tests, for oats agents running locally on OCC_HOST
-# export OATS_TESTS=$HOME/oats_tests
+export OATS_TESTS=$HOME/oats_tests
+
+# Session authentication. You should generate this by 'rake secret' in OCC folder
+export OATS_COOKIE_SECRET=ABCD940b804521eb2b85198d59ebce18b2b50461178548444b3fe8a73e2a4d27d1bb49a041770be853df9fbe696384051e79dada968c120698bf8e980314dc56
+
+# To run OCC in production mode by default
+export RAILS_ENV="production"
 
 
-# *** THESE ARE OPTIONAL ***
+# *** DEFINITIONS BELOW ARE OPTIONAL ***
 
-# Need to define only if you also want to use Google Auth2
-# If defined, will redirect occ entry to this URL
-# Google_oauth2 requires fixed domain call-back
-#export OCC_SERVER_HOST_QUALIFIED=occ_fully_qualified_host_name.com
+# To have the bug correlations show the links to your bug tracking software
+export OATS_BUG_URL_PREFIX="https://redmine.gr-apps.com/issues/"
+
+# To have OATS agents perform SVN updates every time they start.
+export OATS_TESTS_SVN_REPOSITORY="https://your.com/svn_path/oats_tests"
+
+
+# *** USE THESE ONLY IF YOU WANT GOOGLE AUTH2 SUPPORT ***
+
+# Following is a sample entry for the 
+# Client ID:	123456149380-9rqfkqs0vo48j9c7vfla1lc3jhm1t9ip.apps.googleusercontent.com
+# Email address:  379436149380-9rqfkqs0vo48j9c7vfla1lc3jhm1t9ip@developer.gserviceaccount.com
+# Client secret:  _I_xldwrlXLYZ9YpEEw9JUrz
+# Redirect URIs:	https://occ_fully_qualified_host_name.com/oauth2callback
+# JavaScript origins:	https://occ_fully_qualified_host_name.com
+
+# If defined, will redirect occ entry to this URL because Google_oauth2 requires
+  fixed domain call-back
+export OATS_OCC_SERVER_HOST_QUALIFIED=occ_fully_qualified_host_name.com
+
 # Google auth registration
-#export OATS_GOOGLE_KEY=XXX.apps.googleusercontent.com
-#export OATS_GOOGLE_SECRET=xxxxxxxxxxxxxxxxxxxxxxxx
+export OATS_GOOGLE_KEY=123456149380-9rqfkqs0vo48j9c7vfla1lc3jhm1t9ip.apps.googleusercontent.com
+export OATS_GOOGLE_SECRET=_I_xldwrlXLYZ9YpEEw9JUrz
+
+
+
+
+
 

@@ -46,7 +46,7 @@ Occ::Application.config.occ = {
   'svn_repository'       => ENV['OATS_TESTS_SVN_REPOSITORY'] ,
   
   # Bugs will be displayed as a link using this 
-  'bug_url_prefix'       => 'https://redmine.gr-apps.com/issues/' ,
+  'bug_url_prefix'       => ENV['OATS_BUG_URL_PREFIX'] ,
   
   # Timeout for agent to respond, should respond quickly, unless dead
   'timeout_waiting_for_agent' => 10,

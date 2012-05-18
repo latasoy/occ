@@ -143,3 +143,28 @@ queue.
 to OCC, and request the next Job until no Job is left in the
 queue.  Agents go into waiting state if there are no more Jobs to
 execute.
+
+== Post Installation Updates/Maintenance
+
+
+IMPORTANT: OATS/OCC related environment definitions are in
+$HOME/occ_environment_vars There are not kept in source control, so DO NOT LOOSE
+THEM. Most all the application recovered from source control, except for the
+MySQL DB and the test execution logs. Usually they are not deemed critical. If
+you disagree you can do daily backups.
+
+On UBUNTU, typically:
+-  To start OCC, start an XTERM and type in 'occ'
+- To kill it, type '^C' in the terminal.
+
+- You can run OATS locally in NetBeans on the AGENT_HOST machines to debug
+  execution issues specific to Ubuntu. Otherwise you should not be on the machine.
+
+To Update the OCC code,
+
+ 1. Just in case, save current OCC code: 'cp -r occ occ.save'
+    (or note the GITversion, and git checkout that version to restore.)
+ 2. cd occ
+ 3. git pull
+ 3. bundle update
+ 4. Try starting OCC. If it complains about missing gems, try 'bundle install'
