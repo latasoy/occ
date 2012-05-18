@@ -16,7 +16,7 @@ end
 # Most of these can be set in here or from the environment
 
 # NOTE: In addtion to the below, a secret is required to generate an integrity 
-# hash for cookie session data.  Define ENV['COOKIE_SECRET'] or 
+# hash for cookie session data.  Define ENV['OATS_COOKIE_SECRET'] or 
 # Use config.secret_token = "some secret phrase of at least 30 characters in
 #   .../occ/config/initializers/secret_token.rb
 # You can generate it by 'cd occ; rake secret'
@@ -64,7 +64,7 @@ Occ::Application.config.occ = {
   
   # Make sure users come in via standard fully-qualified domain, needed for 
   # Google_oauth2 (see below).   Define this only for prod environment
-  'occ_server_host_qualified' => ENV['OCC_SERVER_HOST_QUALIFIED'] ,
+  'occ_server_host_qualified' => ENV['OATS_OCC_SERVER_HOST_QUALIFIED'] ,
   # Client ID and Secret for Auth2
   'google_key' => ENV['OATS_GOOGLE_KEY'] ,
   'google_secret' => ENV['OATS_GOOGLE_SECRET'] ,

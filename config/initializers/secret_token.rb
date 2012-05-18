@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Occ::Application.config.secret_token = ENV['COOKIE_SECRET']
+Occ::Application.config.secret_token = ENV['OATS_COOKIE_SECRET']
