@@ -4,9 +4,9 @@ class Erequest < ActiveRecord::Base
   belongs_to :user
   has_many :stopped_jobs, :class_name =>'Jobs', :foreign_key =>"stop_erequest_id"
   belongs_to :environment  # Environment to start or stop
-  #has_one :environment  # Last start erequest referenced by the environment
   validates :environment, :presence => true
-  validates :repo_version, :presence => true, :if => "command == 'start'"
+  # Let user unset the repo to bypass contacting the SVN
+#  validates :repo_version, :presence => true, :if => "command == 'start'"
   validates :user, :presence => true
   default_scope :order => 'id desc', :limit => 100
 
@@ -281,6 +281,7 @@ where erequest_id = #{self.id} and job.stop_erequest_id is not null;"
             self.repo_version = git_rev
           else
             repo = Occ::Application.config.occ['svn_repository']
+            return unless repo # Let user unset the repo to bypass contacting the SVN
             cmd = "svn info #{repo}"
             Rails.logger.info "Issuing SVN cmd: #{cmd}"
             svn_out = `#{cmd}`

@@ -17,9 +17,11 @@ module Occ
 
     # Custom directories with classes and modules you want to be autoloadable.
     
-    # Instead of using OATS gem, use the following for OATS/OCC development 
-    oats_dir = "#{Rails.root}/../oats"
-    config.autoload_paths += %W( #{oats_dir}/lib ) if File.directory?(oats_dir)
+    # Use the dev versions instead of gems of oats&agent packages unless development versions exist next to occ
+    proj_dir = File.expand_path('..', Rails.root)
+    %w(oats oats_agent).each do |pkg|
+      config.autoload_paths += %W( #{proj_dir}/#{pkg}/lib ) if File.directory?(proj_dir + "/pkg")
+    end
 
     # If defined, will redirect occ entry to this URL
     # Needed for Google_oauth2

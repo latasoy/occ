@@ -1,4 +1,4 @@
-require 'oats/rclient' # Called via machine to communicate with rserver
+require 'oats_agent/rclient' # Called via machine to communicate with rserver
 require 'oats/user_api' #  Interface methods to user methods implemented in other modules
 require 'oats/test_data' # Needed to unmarshal oats_info object in rclient
 require 'oats/report' # Used in views/jobs/_jobs_table.html.erb ot get failed file nane
