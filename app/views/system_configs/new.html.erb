@@ -1,5 +1,8 @@
-<h1>New system_config</h1>
+<% content_for :head do %>
+  New System Configuration Variable
+<% end %> 
 
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu'%>
+<% end %> 
 <%= render 'form' %>
-
-<%= link_to 'Back', system_configs_path %>

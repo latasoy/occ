@@ -139,7 +139,7 @@ class ServicesController < ApplicationController
             [:email,:name, :last_name].find do |a|
               next unless a
               service = Service.where(a => @authhash[a]).first
-              if service
+              if service and @authhash[a]
                 msg = "There is already a user #{a == :name ? '' : service.name+' '}with #{a.to_s} #{@authhash[a]} using #{service.provider} authentication. Please read the note below carefully and consider associating this authentication to your existing account."
                 break
               end
