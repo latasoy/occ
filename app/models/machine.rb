@@ -124,9 +124,7 @@ class Machine < ActiveRecord::Base
     self.job = nil
     self.save
     Rails.logger.info "Attempting to start #{name}"
-    cmd = remexe(repo ? "-r #{repo}" :nil)
-    Rails.logger.info "Issuing: #{cmd}"
-    Rails.logger.info `#{cmd}`
+    remexe(repo ? "-r #{repo}" :nil)
     return unless verify
     max_secs = 8
     sleep init_secs = 2
@@ -149,11 +147,7 @@ class Machine < ActiveRecord::Base
     end
     Rails.logger.info msg
     3.times { break if issue_erequest(request) == 'dead'; sleep 1 }
-    unless self.persisted_status == 'dead'
-      cmd = remexe("-k")
-      Rails.logger.info "Issuing: #{cmd}"
-      Rails.logger.info `#{cmd}`
-    end
+    remexe("-k") unless self.persisted_status == 'dead'
   end
 
   # Return messages in an array
@@ -260,25 +254,28 @@ class Machine < ActiveRecord::Base
   end
 
   def remexe(input_cmd = nil)
-    cmd = "oats -a -p #{port} -n #{nickname}"
+    cmd = "oats_agent -p #{port} -n #{nickname}"
     cmd += " -u #{user.email}" if user
     cmd += ' ' + input_cmd if input_cmd
     occ = Occ::Application.config.occ
-    if RUBY_PLATFORM =~ /(mswin|mingw)/
+    com = if RUBY_PLATFORM =~ /(mswin|mingw)/
       raise 'NEED TO UPDATE THE CODE TO DO REMOTE WINDOWS ACCESS FROM OCC'
       remote_params = ''
       name == occ['server_host'] || remote_params = ' -u qa -p ' + occ['agent_mp'] + ' \\\\' + name
       FileUtils.mkdir_p Oats.result_archive_dir
-      return "psexec.exe -d -i -n #{occ['timeout_waiting_for_agent']} -w #{$oats['result_archive_dir']}" +
+      "psexec.exe -d -i -n #{occ['timeout_waiting_for_agent']} -w #{$oats['result_archive_dir']}" +
         remote_params + " #{occ['bash_path']} " + cmd
     else
       if name == ENV['HOSTNAME'] or name == occ['server_host']
-        return cmd
+        cmd
       else
-        return "ssh #{name} oats/bin/#{cmd}"
+        "ssh #{name} oats/bin/#{cmd}"
       end
     end
+    Rails.logger.info "Issuing: #{com}"
+    Rails.logger.info `#{com}`
   end
+  #  OatsAgent.spawn(options)
 
 
 end

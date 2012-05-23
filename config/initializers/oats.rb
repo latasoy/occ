@@ -60,7 +60,7 @@ Occ::Application.config.occ = {
   'results_webserver' => nil,
   
   # If set, bypass login request, and use this id to login all users for development w/o network access
-  'login_user_service_id'    => nil, # 2
+  'login_user_service_id'    => ENV['OATS_LOGIN_USER_SERVICE_ID'] , # 2
   
   # Make sure users come in via standard fully-qualified domain, needed for 
   # Google_oauth2 (see below).   Define this only for prod environment

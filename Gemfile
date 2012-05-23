@@ -10,8 +10,13 @@ gem 'omniauth-google-oauth2'  # google-auth.gem is no good. It asks for contacts
 #gem 'omniauth-github'
 
 # Include oats_agent gem unless a development version exists next to occ
-gem 'oats_agent' unless File.directory? File.expand_path('../../oats_agent', __FILE__)
-
+if File.directory? File.expand_path('../../oats_agent', __FILE__)
+  gem 'log4r'
+  gem 'em-http-request'
+else
+  gem 'oats_agent' 
+end
+gem 'eventmachine'
 if RUBY_PLATFORM =~ /linux/ # Seems to be needed by Ubuntu-- For OCC or OATS?
   gem 'execjs'
   gem 'rake'
