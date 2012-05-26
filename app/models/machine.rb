@@ -260,16 +260,17 @@ class Machine < ActiveRecord::Base
   end
 
   def remexe(input_cmd = nil)
-    cmd = "oats -a -p #{port} -n #{nickname}"
+    cmd = ENV['OATS_HOME'] ? (ENV['OATS_HOME'] + '/bin/oats') : 'oats'
+    cmd += '.bat' if RUBY_PLATFORM =~ /(mswin|mingw)/
+    cmd += " -a -p #{port} -n #{nickname}"
     cmd += " -u #{user.email}" if user
     cmd += ' ' + input_cmd if input_cmd
     occ = Occ::Application.config.occ
     if RUBY_PLATFORM =~ /(mswin|mingw)/
-      raise 'NEED TO UPDATE THE CODE TO DO REMOTE WINDOWS ACCESS FROM OCC'
-      remote_params = ''
-      name == occ['server_host'] || remote_params = ' -u qa -p ' + occ['agent_mp'] + ' \\\\' + name
-      FileUtils.mkdir_p Oats.result_archive_dir
-      return "psexec.exe -d -i -n #{occ['timeout_waiting_for_agent']} -w #{$oats['result_archive_dir']}" +
+      archiv = ENV['HOME'] + '/results_archive'
+      remote_params = (name == occ['server_host']) ? '' : (' -u qa -p ' + occ['agent_mp'] + ' \\\\' + name)
+      #      FileUtils.mkdir_p Oats.result_archive_dir
+      return "psexec.exe -d -i -n #{occ['timeout_waiting_for_agent']} -w #{archiv}" +
         remote_params + " #{occ['bash_path']} " + cmd
     else
       if name == ENV['HOSTNAME'] or name == occ['server_host']

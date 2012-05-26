@@ -20,7 +20,11 @@ gem 'omniauth-google-oauth2'  # google-auth.gem is no good. It asks for contacts
 gem 'oats' unless File.directory? File.expand_path('../../oats', __FILE__)
 
 gem "log4r"
-gem 'eventmachine'
+if RUBY_PLATFORM =~ /(mswin|mingw)/
+  gem 'eventmachine',  '=0.12.10'
+else
+  gem 'eventmachine'
+end
 
 if RUBY_PLATFORM =~ /linux/ # Seems to be needed by Ubuntu-- For OCC or OATS?
   gem 'execjs'

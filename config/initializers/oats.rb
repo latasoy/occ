@@ -11,6 +11,7 @@ unless ENV['HOSTNAME']
     ENV['HOSTNAME'] = `hostname`.chomp
   end
 end
+ENV['HOSTNAME'] = ENV['HOSTNAME'].downcase
 
 # Configuration parameters controlling OATS/OCC/Agent behavior
 # Most of these can be set in here or from the environment
