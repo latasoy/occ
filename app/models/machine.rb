@@ -124,9 +124,7 @@ class Machine < ActiveRecord::Base
     self.job = nil
     self.save
     Rails.logger.info "Attempting to start #{name}"
-    cmd = remexe(repo ? "-r #{repo}" :nil)
-    Rails.logger.info "Issuing: #{cmd}"
-    Rails.logger.info `#{cmd}`
+    agent(repo ? repo : nil)
     return unless verify
     max_secs = 8
     sleep init_secs = 2
@@ -149,11 +147,7 @@ class Machine < ActiveRecord::Base
     end
     Rails.logger.info msg
     3.times { break if issue_erequest(request) == 'dead'; sleep 1 }
-    unless self.persisted_status == 'dead'
-      cmd = remexe("-k")
-      Rails.logger.info "Issuing: #{cmd}"
-      Rails.logger.info `#{cmd}`
-    end
+    agent(true) unless self.persisted_status == 'dead'
   end
 
   # Return messages in an array
@@ -224,7 +218,7 @@ class Machine < ActiveRecord::Base
     begin
       # load 'rclient.rb' # debug
       EventMachine::run {
-        conn = EventMachine::connect name, port, Oats::Rclient, nickname, agent_request
+        conn = EventMachine::connect name, port, OatsAgent::Rclient, nickname, agent_request
         # Need to terminate effort in case host name or else is bad.
         EM.add_timer(Occ::Application.config.occ['timeout_waiting_for_agent']) {conn.close_connection }
       }
@@ -259,28 +253,19 @@ class Machine < ActiveRecord::Base
     end
   end
 
-  def remexe(input_cmd = nil)
-    cmd = ENV['OATS_HOME'] ? (ENV['OATS_HOME'] + '/bin/oats') : 'oats'
-    cmd += '.bat' if RUBY_PLATFORM =~ /(mswin|mingw)/
-    cmd += " -a -p #{port} -n #{nickname}"
-    cmd += " -u #{user.email}" if user
-    cmd += ' ' + input_cmd if input_cmd
-    occ = Occ::Application.config.occ
-    if RUBY_PLATFORM =~ /(mswin|mingw)/
-      archiv = ENV['HOME'] + '/results_archive'
-      remote_params = (name == occ['server_host']) ? '' : (' -u qa -p ' + occ['agent_mp'] + ' \\\\' + name)
-      #      FileUtils.mkdir_p Oats.result_archive_dir
-      return "psexec.exe -d -i -n #{occ['timeout_waiting_for_agent']} -w #{archiv}" +
-        remote_params + " #{occ['bash_path']} " + cmd
-    else
-      if name == ENV['HOSTNAME'] or name == occ['server_host']
-        return cmd
+  
+  def agent(option = nil)
+    options = { 'nickname' => nickname, 'port' => port }
+    options['user' ] = user.email if user
+    if option
+      if option.instance_of? String
+        options['repository_version'] = repo
       else
-        return "ssh #{name} oats/bin/#{cmd}"
+        options['kill_agent'] = true
       end
     end
+    Rails.logger.info "Initiate OatsAgent request: #{options.inspect}"
+    OatsAgent.spawn(options)
   end
-
-
+  
 end
-

@@ -1,5 +1,9 @@
-<h1>Editing system_config</h1>
+<% content_for :head do %>
+  Edit System Configuration <%=  @system_config.name %>
+<% end %> 
+
+<% content_for :navigation do %>
+  <%= render :partial => 'environments/home_menu'%>
+<% end %> 
 
 <%= render 'form' %>
-
-<%= link_to 'Back', system_configs_path %>

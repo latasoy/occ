@@ -1,24 +1,31 @@
-<h1>Listing system_configs</h1>
+<% content_for :head do %>
+  System Configuration Variables
+<% end %> 
 
-<table>
+<% content_for :navigation do %>
+  <%= link_to 'New', new_system_config_path %> |
+  <%= render :partial => 'environments/home_menu'%>
+<% end %> 
+
+<table border="1">
   <tr>
     <th>Name</th>
     <th>Value</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th>Edit</th>
+    <th>Delete</th>
   </tr>
 
-<% @system_configs.each do |system_config| %>
-  <tr>
-    <td><%= system_config.name %></td>
-    <td><%= system_config.value %></td>
-    <td><%= link_to 'Edit', edit_system_config_path(system_config) %></td>
-    <td><%= link_to 'Destroy', system_config, :confirm =>'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <% @system_configs.each do |system_config| %>
+    <tr>
+      <td><%= system_config.name %></td>
+      <td><%= system_config.value %></td>
+      <td><%= link_to 'Edit', edit_system_config_path(system_config) %></td>
+      <td>
+        <%= button_to 'Delete',  { :action => "destroy", :id => system_config.id }, :method => :delete, :confirm => "Are you sure?"%>        
+      </td>
+
+    </tr>
+  <% end %>
 </table>
 
 <br />
-
-<%= link_to 'New System config', new_system_config_path %>

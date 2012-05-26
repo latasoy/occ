@@ -1,13 +1,6 @@
 source 'http://rubygems.org'
 gem 'rails' , '3.2.1'
 gem 'mongrel', '>= 1.2.0.pre2'
-
-# On ubuntu mysql2 gem needs 'libmysqlclient-dev' package to be installed.
-# On Mac, Make sure the env where NB started contains the DYLD path below.
-# If getting uninitialized conts errors, start from NB fro shell where this defined.
-# Better yet, for GUI, add this to ~/.netbeans/vers/etc/netbeans.config
-#export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
-#sudo env ARCHFLAGS="-arch x86_64" /usr/bin/gem install --no-rdoc --no-ri mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-openid' # For Yahoo, also google/openid
@@ -16,16 +9,13 @@ gem 'omniauth-google-oauth2'  # google-auth.gem is no good. It asks for contacts
 #gem 'omniauth-twitter'
 #gem 'omniauth-github'
 
-# Include gem unless there is a parallel oats directory.
-gem 'oats' unless File.directory? File.expand_path('../../oats', __FILE__)
-
-gem "log4r"
+# Include oats_agent gem unless a development version exists next to occ
+gem 'oats_agent'
 if RUBY_PLATFORM =~ /(mswin|mingw)/
   gem 'eventmachine',  '=0.12.10'
 else
   gem 'eventmachine'
 end
-
 if RUBY_PLATFORM =~ /linux/ # Seems to be needed by Ubuntu-- For OCC or OATS?
   gem 'execjs'
   gem 'rake'

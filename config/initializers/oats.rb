@@ -1,4 +1,4 @@
-require 'oats/rclient' # Called via machine to communicate with rserver
+require 'oats_agent/rclient' # Called via machine to communicate with rserver
 require 'oats/user_api' #  Interface methods to user methods implemented in other modules
 require 'oats/test_data' # Needed to unmarshal oats_info object in rclient
 require 'oats/report' # Used in views/jobs/_jobs_table.html.erb ot get failed file nane
@@ -61,7 +61,7 @@ Occ::Application.config.occ = {
   'results_webserver' => nil,
   
   # If set, bypass login request, and use this id to login all users for development w/o network access
-  'login_user_service_id'    => nil, # 2
+  'login_user_service_id'    => ENV['OATS_LOGIN_USER_SERVICE_ID'] , # 2
   
   # Make sure users come in via standard fully-qualified domain, needed for 
   # Google_oauth2 (see below).   Define this only for prod environment
