@@ -124,7 +124,7 @@ class Machine < ActiveRecord::Base
     self.job = nil
     self.save
     Rails.logger.info "Attempting to start #{name}"
-    remexe(repo ? "-r #{repo}" :nil)
+    agent(repo ? repo : nil)
     return unless verify
     max_secs = 8
     sleep init_secs = 2
@@ -147,7 +147,7 @@ class Machine < ActiveRecord::Base
     end
     Rails.logger.info msg
     3.times { break if issue_erequest(request) == 'dead'; sleep 1 }
-    remexe("-k") unless self.persisted_status == 'dead'
+    agent(true) unless self.persisted_status == 'dead'
   end
 
   # Return messages in an array
@@ -253,30 +253,19 @@ class Machine < ActiveRecord::Base
     end
   end
 
-  def remexe(input_cmd = nil)
-    cmd = "oats_agent -p #{port} -n #{nickname}"
-    cmd += " -u #{user.email}" if user
-    cmd += ' ' + input_cmd if input_cmd
-    occ = Occ::Application.config.occ
-    com = if RUBY_PLATFORM =~ /(mswin|mingw)/
-      raise 'NEED TO UPDATE THE CODE TO DO REMOTE WINDOWS ACCESS FROM OCC'
-      remote_params = ''
-      name == occ['server_host'] || remote_params = ' -u qa -p ' + occ['agent_mp'] + ' \\\\' + name
-      FileUtils.mkdir_p Oats.result_archive_dir
-      "psexec.exe -d -i -n #{occ['timeout_waiting_for_agent']} -w #{$oats['result_archive_dir']}" +
-        remote_params + " #{occ['bash_path']} " + cmd
-    else
-      if name == ENV['HOSTNAME'] or name == occ['server_host']
-        cmd
+  
+  def agent(option = nil)
+    options = { 'nickname' => nickname, 'port' => port }
+    options['user' ] = user.email if user
+    if option
+      if option.instance_of? String
+        options['repository_version'] = repo
       else
-        "ssh #{name} oats/bin/#{cmd}"
+        options['kill_agent'] = true
       end
     end
-    Rails.logger.info "Issuing: #{com}"
-    Rails.logger.info `#{com}`
+    Rails.logger.info "Initiate OatsAgent request: #{options.inspect}"
+    OatsAgent.spawn(options)
   end
-  #  OatsAgent.spawn(options)
-
-
+  
 end
-
