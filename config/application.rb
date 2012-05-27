@@ -20,11 +20,11 @@ module Occ
     # Use the dev versions instead of gems of oats&agent packages unless development versions exist next to occ
     proj_dir = File.expand_path('..', Rails.root)
     if File.directory? dir = (proj_dir +"/oats")
-      config.autoload_paths.push(dir + 'lib')
+      config.autoload_paths.push(dir + '/lib')
       ENV['OATS_HOME'] = dir
     end
     if File.directory? dir = (proj_dir +"/oats_agent")
-      config.autoload_paths.push(dir + 'lib')
+      config.autoload_paths.push(dir + '/lib')
       ENV['OATS_AGENT_HOME'] = dir
     end
 

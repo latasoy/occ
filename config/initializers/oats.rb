@@ -1,3 +1,4 @@
+require 'oats_agent' # To pickup spawn method
 require 'oats_agent/rclient' # Called via machine to communicate with rserver
 require 'oats/user_api' #  Interface methods to user methods implemented in other modules
 require 'oats/test_data' # Needed to unmarshal oats_info object in rclient
