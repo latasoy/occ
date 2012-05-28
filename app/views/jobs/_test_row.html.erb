@@ -32,7 +32,7 @@ end %>
     bug = jobtest.bug
     bug_jobtests = bug.jobtests
     cnt = bug_jobtests.active.count;
-    bug_str << link_to(bug.key, url_for(bug.url))
+    bug_str << link_to_if(bug.url, bug.key, url_for(bug.url))
     bug_str << ' ' + link_to("has #{fail_count = bug_jobtests.failing.count}/#{cnt} test(s)", bug_path(bug)) if cnt > 0
     bug_str << ' ' + link_to('introduced', job_path(jobtest.job)) unless job.id == jobtest.job.id
 
@@ -46,7 +46,7 @@ end %>
         bug_str << ' ' + link_to('DELETE BUG',  { :controller => 'jobs', :action => "pass", :id => job.id,:jobtest_id => jobtest.id  },
           :method => :get, :confirm => "Is bug #{bug.key} closed?")
         #bug_str << ' ' + link_to('DELETE BUG',  { :controller => 'bugs', :action => "destroy", :id => bug.id },
-          #:method => :delete, :confirm => "Is bug #{bug.key} fixed?")
+        #:method => :delete, :confirm => "Is bug #{bug.key} fixed?")
       else
         bug_str << ' ' + link_to('FIXED', pass_job_path(job, :jobtest_id => jobtest.id))
       end

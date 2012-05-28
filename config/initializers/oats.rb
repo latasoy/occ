@@ -48,7 +48,7 @@ Occ::Application.config.occ = {
   'svn_repository'       => ENV['OATS_TESTS_SVN_REPOSITORY'] ,
   
   # Bugs will be displayed as a link using this 
-  'bug_url_prefix'       => ENV['OATS_BUG_URL_PREFIX'] ,
+  'bug_url_prefix'       => ENV['OATS_BUG_URL_PREFIX'] , # 'http://jira/'
   
   # Timeout for agent to respond, should respond quickly, unless dead
   'timeout_waiting_for_agent' => 10,
@@ -62,7 +62,7 @@ Occ::Application.config.occ = {
   'results_webserver' => nil,
   
   # If set, bypass login request, and use this id to login all users for development w/o network access
-  'login_user_service_id'    => ENV['OATS_LOGIN_USER_SERVICE_ID'] , # 2
+  'skip_authentication'    => true, 
   
   # Make sure users come in via standard fully-qualified domain, needed for 
   # Google_oauth2 (see below).   Define this only for prod environment

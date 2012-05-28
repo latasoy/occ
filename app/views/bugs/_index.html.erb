@@ -12,7 +12,7 @@
 
   <% @bugs.each do |bug| %>
     <tr align="center">
-      <td><%= link_to bug.key , url_for(bug.url) %></td>
+      <td><%= link_to_if bug.url, bug.key , url_for(bug.url) %></td>
       <td><%= jt = bug.jobtests; cnt = jt.active.count; link_to_if cnt > 0, "#{jt.failing.count}/#{cnt}" , bug_path(bug) %></td>
       <td><%= link_to 'Edit', edit_bug_path(bug) %></td>
       <td><% if bug.deleted_at %>
