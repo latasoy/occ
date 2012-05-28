@@ -223,9 +223,14 @@ class Machine < ActiveRecord::Base
         EM.add_timer(Occ::Application.config.occ['timeout_waiting_for_agent']) {conn.close_connection }
       }
     rescue Exception => exc
-      Rails.logger.info "ERROR: #{exc.message}"
-      #      raise exc
-      Rails.logger.info "ERROR: #{exc.backtrace.join("\n")}"
+      @message = "#{exc.class} -> #{exc}"
+      if exc.message == 'unable to resolve server address'
+        @message << ", trying to reach host: #{name}"
+        Rails.logger.error 'ERROR: ' + @message
+      else
+        Rails.logger.error 'ERROR: ' + @message
+        Rails.logger.error "#{exc.backtrace.join("\n")}"
+      end
     end
     if conn
       resp = conn.response

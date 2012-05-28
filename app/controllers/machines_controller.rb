@@ -32,19 +32,20 @@ class MachinesController < ApplicationController
   def start
     @machine.agent_info = 'Restart requested by user'
     @machine.start
+    flash[:error] = @machine.message if @machine.message
     redirect_to machines_path
   end
 
   def shutdown
     @machine.agent_info = 'Shutdown requested by user'
     @machine.shutdown
+    flash[:error] = @machine.message if @machine.message
     redirect_to machines_path
   end
 
   def status
     # For some reason other calls ends up here at the end
     return unless action_name == 'status'
-
     @machine.status
     flash[:warning] = @machine.message if @machine.message
     #    @machines = Machine.active
