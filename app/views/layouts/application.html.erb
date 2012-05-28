@@ -16,7 +16,7 @@
               <%= yield(:navigation) if content_for?(:navigation) %>
             </li>
             <% if current_user %>
-              <li><%= link_to 'Admin', system_configs_path if current_user.level == 1 %></li>
+              <li><%= link_to 'Admin', system_configs_path if current_user.level <= 1 %></li>
               <% if current_user.user_id != 1 %>
                 <span><%= link_to current_user.email, services_path %></span>
                 <li><%= link_to "Sign out", signout_services_path %></li>
