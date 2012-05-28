@@ -2,10 +2,15 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 
 # Dynamically modifiable system configs
-SystemConfig.create([ { :name => 'user_level_cutoff', :value => nil, }])
+SystemConfig.create([ 
+    { :name => 'user_level_cutoff', :value => nil, 
+      :description => 'Set to 1 to prevent lower level users from using the system.'},
+    { :name => 'skip_authentication', :value => true,
+      :description => 'Set it to anything to bypass user authentication.'}])
 
 # Create a system user.
-User.create([ {:level => 10, :uname => 'System', :password => 'SystemPass'}])
+User.create([ {:level => 0, :uname => 'System', :password => 'SystemPass'}])
+Service.create([ {:user_id => 1,}])
 
 if false  # Safer to create these manually from the GUI
   env_names = []

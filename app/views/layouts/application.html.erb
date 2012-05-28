@@ -17,11 +17,13 @@
             </li>
             <% if current_user %>
               <li><%= link_to 'Admin', system_configs_path if current_user.level == 1 %></li>
-              <span><%= link_to current_user.email, services_path %></span>
-              <li><%= link_to "Sign out", signout_services_path %></li>
-              <% else %>
-              <li><%= link_to "Sign in", signin_services_path %></li>
+              <% if current_user.user_id != 1 %>
+                <span><%= link_to current_user.email, services_path %></span>
+                <li><%= link_to "Sign out", signout_services_path %></li>
               <% end %>
+            <% else %>
+              <li><%= link_to "Sign in", signin_services_path %></li>
+            <% end %>
           </ul>
         </nav>
       </section>

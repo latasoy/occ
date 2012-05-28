@@ -4,6 +4,8 @@
 <%= link_to 'Environments', environments_path %> |
 <%= link_to 'Lists', lists_path %> |
 <%= link_to 'Machines', machines_path %> |
-<%= link_to 'Users', users_path %> |
+<% if current_user and current_user.user_id != 1 %>
+  <%= link_to 'Users', users_path %> |
+<% end %>
 <%# link_to 'Release Notes', :controller => "release_notes", :action => 'index'  %>
 <%= link_to 'Home', :controller => "environments", :action => 'summary'  %>

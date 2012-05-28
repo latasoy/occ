@@ -21,7 +21,13 @@ class ApplicationController < ActionController::Base
   private
 
   def current_service
-    service_id = Occ::Application.config.occ['login_user_service_id'] || session[:service_id]
+    if Occ::Application.config.occ['skip_authentication']
+      skip = true
+    else
+      skip = SystemConfig.find_by_name(:skip_authentication).value
+      skip = nil if skip == ''
+    end
+    service_id = skip ? 1 : session[:service_id]
     @current_service ||= Service.find_by_id(service_id) if service_id
   end
 

@@ -9,20 +9,20 @@
 
 <table border="1">
   <tr>
+    <th>Delete</th>
     <th>Name</th>
     <th>Value</th>
-    <th>Edit</th>
-    <th>Delete</th>
+    <th>Description</th>
   </tr>
 
   <% @system_configs.each do |system_config| %>
     <tr>
-      <td><%= system_config.name %></td>
-      <td><%= system_config.value %></td>
-      <td><%= link_to 'Edit', edit_system_config_path(system_config) %></td>
       <td>
         <%= button_to 'Delete',  { :action => "destroy", :id => system_config.id }, :method => :delete, :confirm => "Are you sure?"%>        
       </td>
+      <td><%= link_to system_config.name, edit_system_config_path(system_config) %></td>
+      <td><%= system_config.value %></td>
+      <td><%= system_config.description %></td>
 
     </tr>
   <% end %>
