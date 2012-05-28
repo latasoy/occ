@@ -61,8 +61,8 @@ Occ::Application.config.occ = {
   # Requires each agent results to be file-shared with the webserver
   'results_webserver' => nil,
   
-  # If set, bypass login request, and use this id to login all users for development w/o network access
-  'skip_authentication'    => true, 
+  # If set, bypass login requests. Otherwise use the skip_users db config
+  'skip_users'    => false, 
   
   # Make sure users come in via standard fully-qualified domain, needed for 
   # Google_oauth2 (see below).   Define this only for prod environment

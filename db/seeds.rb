@@ -5,7 +5,7 @@
 SystemConfig.create([ 
     { :name => 'user_level_cutoff', :value => nil, 
       :description => 'Set to 1 to prevent lower level users from using the system.'},
-    { :name => 'skip_authentication', :value => true,
+    { :name => 'skip_users', :value => true,
       :description => 'Set it to anything to bypass user authentication.'}])
 
 # Create a system user.

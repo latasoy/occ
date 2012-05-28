@@ -1,4 +1,4 @@
-
+  
 class Machine < ActiveRecord::Base
   has_many :jobs
   belongs_to :job
@@ -255,7 +255,7 @@ class Machine < ActiveRecord::Base
 
   
   def agent(option = nil)
-    options = { 'nickname' => nickname, 'port' => port }
+    options = { 'nickname' => nickname, 'port' => port, 'agent_host' => name}
     options['user' ] = user.email if user
     if option
       if option.instance_of? String
