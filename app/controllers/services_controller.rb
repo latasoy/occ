@@ -30,7 +30,11 @@ class ServicesController < ApplicationController
     else  # create account
       # Google gives new uid/session for same email if app is called from different UIDs
       @newuser = User.new
-      @newuser.level = 1 unless User.find_by_level(1) # Have at least one user as administrator
+      if User.find_by_level(1) # Have at least one user as administrator
+        @newuser.level = 4
+      else
+        @newuser.level = 1 
+      end
       @newuser.services.build(session[:authhash])
       if @newuser.save!
         # signin existing user

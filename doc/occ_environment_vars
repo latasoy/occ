@@ -5,8 +5,10 @@
 # configuration parameters
 
 # **** THESE MUST BE DEFINED ****
-# Set this because OATS must be installed in a writable/non-system location
-# GEM_HOME/bin must be in the path (this was done in ~/la/profile)
+
+# Set this on UBUNTU or if you are not using because OATS must be installed in a
+# writable/non-system location GEM_HOME/bin must be in the path
+
 export GEM_HOME=$HOME/gems
 
 # Location of your oats_tests, for oats agents running locally on OCC_HOST
