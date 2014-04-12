@@ -1,4 +1,14 @@
 /tmp/
 /log/
-/nbproject/private/
 /public/assets/
+
+# MacOS
+.DS_Store
+
+# Intellij project files
+*.iws
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+.rvm
+
+

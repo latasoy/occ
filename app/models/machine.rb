@@ -258,13 +258,16 @@ class Machine < ActiveRecord::Base
     end
   end
 
-  
+  # option choices translate to:
+  # nil: Just start
+  # String: repo version to start
+  # true: Kill
   def agent(option = nil)
     options = { 'nickname' => nickname, 'port' => port, 'agent_host' => name}
     options['user' ] = user.email if user
     if option
       if option.instance_of? String
-        options['repository_version'] = repo
+        options['repository_version'] = option
       else
         options['kill_agent'] = true
       end
