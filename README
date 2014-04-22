@@ -34,8 +34,7 @@ individual test results, log files, and other test artifacts for a particular Jo
 
 Installing OCC on Linux or Mac is recommended.
 
-= Install OATS, Ruby, and NetBeans as described in README.txt of
-  https://github.com/latasoy/oats.
+= Install OATS as described in README.txt of https://github.com/latasoy/oats.
 
   Make sure OATS_HOME/bin is in your PATH, where OATS_HOME is where oats gem is
   installed or oats is cloned from github
@@ -48,8 +47,6 @@ Installing OCC on Linux or Mac is recommended.
 
  -  On Mac
    - export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
-   - On Mac make sure NetBeans environment also contains the DYLD_LIBRARY_PATH
-     (Include 'source ~/.profile' to the  ...bin/netbeans script.)
 
 
  - Do the following if you want to enable remote access to  mysql DB)
@@ -157,7 +154,7 @@ On UBUNTU, typically:
 -  To start OCC, start an XTERM and type in 'occ'
 - To kill it, type '^C' in the terminal.
 
-- You can run OATS locally in NetBeans on the AGENT_HOST machines to debug
+- You can run OATS locally on the AGENT_HOST machines to debug
   execution issues specific to Ubuntu. Otherwise you should not be on the machine.
 
 To Update the OCC code,
