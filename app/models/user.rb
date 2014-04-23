@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   # Delegate requested attributes to those found in a Service, except for these
   EXCLUDED_ATTRIBUTES = ['id','updated_at', 'created_at']
 
-  def respond_to?(sym)
+  def respond_to?(sym, include_private = false)
     from_service?(sym) || super(sym)
   end
 

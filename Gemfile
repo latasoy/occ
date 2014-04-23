@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
-gem 'rails' , '3.2.1'
-gem 'mongrel', '>= 1.2.0.pre2'
+gem 'rails' , '3.2.17'
+gem 'thin'
 gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-openid' # For Yahoo and google/openid
