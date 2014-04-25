@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 gem 'rails' , '3.2.17'
-gem 'thin'
+gem 'mongrel', '>= 1.2.0.pre2'
+#gem 'thin'
 gem 'mysql2'
 gem 'omniauth'
 gem 'omniauth-openid' # For Yahoo and google/openid
@@ -8,6 +9,7 @@ gem 'omniauth-google-oauth2' if ENV['OATS_GOOGLE_KEY'] # If you want to use goog
 
 # Include oats_agent gem unless a development version exists next to occ
 gem 'oats_agent' unless File.directory? File.expand_path('../../oats_agent', __FILE__)
+# gem 'sidekiq'
 if RUBY_PLATFORM =~ /(mswin|mingw)/
   gem 'eventmachine',  '=0.12.10'
 else
