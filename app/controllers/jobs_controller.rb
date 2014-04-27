@@ -6,6 +6,35 @@ class JobsController < ApplicationController
     c.send(:authorize, "level" => 3)
   end
 
+  # POST /jobs
+  # POST /jobs.json
+  def create
+    if params[:jobid]
+      @job = Job.find_by_runid(params[:jobid])
+      unless @job
+        env = Environment.all.first
+        req = env.erequests.create!(:user => User.first, :command => 'start')
+        @job = req.jobs.create
+        @job.environment_name = env.name
+      end
+      list = List.first
+      @job.start_time = params[:start_time]
+      @job.end_time = params[:end_time]
+      @job.runid = params[:jobid]
+      @job.is_results_final = true
+      @job.list = list
+      @job.list_name = list.name
+      @job.machine = Machine.first
+      @job.process_oats_results_info(params)
+      # job.start_time params[:start_time], :end_time => params[:end_time],
+      #                         :runid => params[:jobid], :is_results_final => true,
+      #                         :list => list, :list_name => list.name,
+      #                        :environment_name => env.name,  :machine => Machine.first)
+      @job.process_oats_results_info(params)
+    end
+    respond_with(@job)
+  end
+
   def index
     respond_with(@jobs = Job.all)
   end
@@ -15,11 +44,11 @@ class JobsController < ApplicationController
     @job = Job.nxt(params)
     if @job
       full_nam = @job.list.name
-      extension = full_nam.sub(/.*\./,'')
+      extension = full_nam.sub(/.*\./, '')
       full_nam += '.yml' if extension == full_nam
     end
     render :json => @job ? {'jid' => @job.id, 'env' => @job.erequest.environment.file_name,
-      'list' => full_nam, 'options' => @job.run_options, 'user' => @job.erequest.user.email} : {}
+                            'list' => full_nam, 'options' => @job.run_options, 'user' => @job.erequest.user.email} : {}
   end
 
   # GET /jobs/1
@@ -37,7 +66,7 @@ class JobsController < ApplicationController
 
   def remove_bug
     # @bug = Bug.find params[:id]
-    Jobtest.remove params[:id] , params[:testid]
+    Jobtest.remove params[:id], params[:testid]
     redirect_to :back
   end
 

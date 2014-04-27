@@ -66,7 +66,7 @@ Occ::Application.routes.draw do
     get 'all', :on => :collection
   end
 
-  resources :jobs,:only => [:index, :show] do
+  resources :jobs,:only => [:index, :show, :create ] do
     get 'nxt', :on => :collection
     get 'remove_bug', :on => :member
     get 'pass', :on => :member

@@ -206,6 +206,7 @@ class Machine < ActiveRecord::Base
     return (get_status(poll) != 'dead')
   end
 
+  # include Sidekiq::Worker
   # No exceptions, but returns one of four status strings
   def issue_erequest(agent_request)
     agent_request[:occ_host] = Occ::Application.config.occ['server_host']

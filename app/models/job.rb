@@ -181,7 +181,11 @@ class Job < ActiveRecord::Base
       end
     end
     self.is_results_final = %w(Archived Error Missing).include?(new_results['results_status']) #  Early Partial Current
+    process_oats_results_info(new_results)
 
+  end
+
+  def process_oats_results_info(new_results)
     if new_results
       testlist = new_results['test_files']
       if testlist
@@ -209,7 +213,6 @@ class Job < ActiveRecord::Base
 
     self.save if self.is_results_final
   end
-
   def results_error_msg
     return @get_results_err if @get_results_err
     return results_error
