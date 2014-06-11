@@ -12,24 +12,24 @@ class JobsController < ApplicationController
     if params[:jobid]
       @job = Job.find_by_runid(params[:jobid])
       unless @job
-        env = Environment.all.first
+        env = Environment.find_by_name(params[:environment_name])
         req = env.erequests.create!(:user => User.first, :command => 'start')
         @job = req.jobs.create
         @job.environment_name = env.name
       end
-      list = List.first
+      list = List.find_by_name(params[:list_name])
       @job.start_time = params[:start_time]
       @job.end_time = params[:end_time]
       @job.runid = params[:jobid]
       @job.is_results_final = true
       @job.list = list
       @job.list_name = list.name
-      @job.machine = Machine.first
+      if params[:machine]
+        @job.machine = Machine.find_by_nickname(params[:machine])
+      else
+        @job.machine = Machine.first
+      end
       @job.process_oats_results_info(params)
-      # job.start_time params[:start_time], :end_time => params[:end_time],
-      #                         :runid => params[:jobid], :is_results_final => true,
-      #                         :list => list, :list_name => list.name,
-      #                        :environment_name => env.name,  :machine => Machine.first)
       @job.process_oats_results_info(params)
     end
     respond_with(@job)
