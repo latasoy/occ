@@ -21,7 +21,7 @@ module Occ
     proj_dir = File.expand_path('..', Rails.root)
     if File.directory? dir = (proj_dir +"/oats")
       config.autoload_paths.push(dir + '/lib')
-      ENV['OATS_HOME'] = dir
+      ENV['OATS_DIR'] = dir
     end
     if File.directory? dir = (proj_dir +"/oats_agent")
       config.autoload_paths.push(dir + '/lib')

@@ -37,7 +37,7 @@ Installing OCC on Linux or Mac is recommended.
 = Install OATS, Ruby, and NetBeans as described in README.txt of
   https://github.com/latasoy/oats.
 
-  Make sure OATS_HOME/bin is in your PATH, where OATS_HOME is where oats gem is
+  Make sure OATS_DIR/bin is in your PATH, where OATS_DIR is where oats gem is
   installed or oats is cloned from github
 
 = Install Mysql server
@@ -91,7 +91,7 @@ directories residing on the client machines. The name of the web server is indic
 by execution.occ.results_webserver entry of the oats.yml file.
 
 For this redirection to work, you should install Apache on each agent machine. See
-the instructions in OATS_HOME/doc/oats_httpd.conf
+the instructions in OATS_DIR/doc/oats_httpd.conf
 
 == Other Setup and Configuration Steps
 
